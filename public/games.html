@@ -207,7 +207,7 @@
     <button class="modal-close" onclick="closeGame()">✕ Close</button>
   </div>
   <div class="modal-body">
-    <iframe class="game-iframe" id="game-iframe" allowfullscreen allow="autoplay; fullscreen"></iframe>
+    <iframe class="game-iframe" id="game-iframe" allow="autoplay; fullscreen"></iframe>
   </div>
 </div>
 
@@ -401,7 +401,7 @@
     const url = document.getElementById("add-thumb-url").value.trim();
     if (url) {
       thumbDataUrl = null;
-      document.getElementById("thumb-preview").innerHTML = '<img src="' + url + '" onerror="this.style.display='none'" />';
+      document.getElementById("thumb-preview").innerHTML = '<img src="' + url + '" onerror="this.style.display=\'none\'" />';
     }
   }
 
