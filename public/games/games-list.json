@@ -95,7 +95,7 @@
     "id": "geometry-dash",
     "title": "Geometry Dash",
     "thumbnail": "/games/thumbs/geometry-dash.jpg",
-    "file": "/games/files/geometry-dash/index.html"
+    "file": "/games/files/geometrydash/index.html"
   },
   {
     "id": "cluster-rush",
@@ -130,7 +130,7 @@
   {
     "id": "gun-spin",
     "title": "Gun Spin",
-    "thumbnail": "/games/thumbs/gun-spin.jpg",
+    "thumbnail": "/games/thumbs/gunspin.jpg",
     "file": "/games/files/non-folder/gun_spin.html"
   },
   {
@@ -148,7 +148,7 @@
   {
     "id": "hollow-knight",
     "title": "Hollow Knight",
-    "thumbnail": "/games/thumbs/hollow-knight.jpg",
+    "thumbnail": "/games/thumbs/hollowknight.jpg",
     "file": "/games/files/non-folder/hollow-knight.html"
   },
   {
