@@ -8,7 +8,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --black: #0a0a0a; --white: #f5f5f0; --gray: #888; }
-    html, body { height: 100%; background: transparent; color: var(--white); font-family: 'Space Mono', monospace; overflow-x: hidden; }
+    html, body { min-height: 100%; background: transparent; color: var(--white); font-family: 'Space Mono', monospace; overflow-x: hidden; }
     body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 200; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
 
     /* NAV */
@@ -163,6 +163,9 @@
   .loader-dot { background: rgba(255,255,255,0.3) !important; }
   .theme-swatch.active::after { color: #fff !important; }
   ::placeholder { color: rgba(255,255,255,0.3) !important; }
+  canvas.vanta-canvas { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: -1 !important; }
+  html, body { min-height: 100% !important; }
+
   #go-btn, .search-wrap button { color: #000 !important; background: rgba(255,255,255,0.92) !important; }
   select option { background: #1a1a1a !important; color: #fff !important; }
 
