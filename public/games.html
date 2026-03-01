@@ -82,7 +82,7 @@
     .add-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 600; align-items: center; justify-content: center; }
     .add-modal.open { display: flex; }
     .add-box { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 480px; padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem; animation: fade-up 0.3s ease both; }
-    .add-box-title { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 1.5rem; }
+    .add-box-title { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 1.5rem; color: #000 !important; }
     .add-tabs { display: flex; gap: 0; border: 1px solid rgba(255,255,255,0.1); }
     .add-tab { flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.4); font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 0.5rem; cursor: pointer; transition: all 0.15s; border-right: 1px solid rgba(255,255,255,0.1); }
     .add-tab:last-child { border-right: none; }
@@ -103,7 +103,7 @@
     .add-row-btns { display: flex; gap: 0.5rem; justify-content: flex-end; }
     .add-btn { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.55rem 1.1rem; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.15s; }
     .add-btn:hover { border-color: #fff; color: #fff; }
-    .add-btn.primary { background: rgba(255,255,255,0.9); color: #000; border-color: transparent; }
+    .add-btn.primary { background: rgba(255,255,255,0.9); color: #000 !important; border-color: transparent; }
     .add-btn.primary:hover { background: #fff; }
     .upload-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.55rem 1rem; border: 1px dashed rgba(255,255,255,0.25); background: transparent; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.15s; width: 100%; justify-content: center; }
     .upload-btn:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
@@ -187,7 +187,6 @@
 <div class="page">
   <div class="page-header">
     <h1 class="page-title">Games</h1>
-    <p class="page-sub">Unblocked — Play anything</p>
   </div>
 
   <div class="controls" id="controls" style="display:none">
