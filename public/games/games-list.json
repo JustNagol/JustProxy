@@ -60,6 +60,12 @@
     "file": "/games/files/tunnel-rush/index.html"
   },
   {
+    "id": "monkey-mart",
+    "title": "Monkey Mart",
+    "thumbnail": "/games/thumbs/monkey-mart.jpg",
+    "file": "/games/files/monkey-mart/index.html"
+  },
+  {
     "id": "ultrakill",
     "title": "ULTRAKILL",
     "thumbnail": "/games/thumbs/ultrakill.jpg",
