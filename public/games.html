@@ -9,10 +9,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --black: #0a0a0a; --white: #f5f5f0; --gray: #888; }
     html, body { min-height: 100%; background: transparent; color: var(--white); font-family: 'Space Mono', monospace; overflow-x: hidden; }
-    body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 200; opacity: 0.35;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-    }
+    body::before { display: none; }
     .nav { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; z-index: 300; background: #111; border: 1px solid #2a2a2a; padding: 0.5rem 0.6rem; gap: 0.25rem; }
     .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; width: 56px; height: 52px; background: transparent; border: none; cursor: pointer; color: #555; transition: color 0.15s, background 0.15s; text-decoration: none; position: relative; }
     .nav-btn:hover { color: var(--white); background: #1a1a1a; }
@@ -188,7 +185,7 @@
   }
 
   async function loadGames() {
-    const override = (() => { try { const v = localStorage.getItem('astriex_games_override'); return v ? JSON.parse(v) : null; } catch { return null; } })();
+    const override = window.ASTRIEX_GAMES_OVERRIDE;
     if (override) { allGames = override; renderGames(allGames); document.getElementById('controls').style.display = 'flex'; return; }
     try {
       const res = await fetch("/games/games-list.json");
@@ -261,29 +258,7 @@
 
   loadGames();
 </script>
-<script>
-  // ── GLOBAL SETTINGS ──
-  (function() {
-    function sg(k, def) { try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); } catch { return def; } }
-    if (sg("astriex_cloak_enabled", false)) {
-      const t = sg("astriex_cloak_title", ""); const f = sg("astriex_cloak_favicon", "");
-      if (t) document.title = t;
-      if (f) { let l = document.querySelector("link[rel*='icon']") || document.createElement("link"); l.rel = "shortcut icon"; l.href = f; document.head.appendChild(l); }
-    }
-    if (sg("astriex_anti_close", false)) {
-      window.addEventListener("beforeunload", e => { e.preventDefault(); e.returnValue = ""; });
-    }
-    document.addEventListener("keydown", e => {
-      if (sg("astriex_panic_enabled", false)) {
-        const k = sg("astriex_panic_key", "");
-        if (k && e.key === k) {
-          const u = sg("astriex_panic_url", "https://classroom.google.com");
-          window.location.replace(u === "custom" ? sg("astriex_panic_custom_url", "https://www.google.com") : u);
-        }
-      }
-    });
-  })();
-</script>
+
 <script>
   VANTA.CLOUDS({
     el: "body",
@@ -302,5 +277,6 @@
     speed: 1.60
   });
 </script>
+<script src="/global.js"></script>
 </body>
 </html>
