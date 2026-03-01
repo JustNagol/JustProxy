@@ -36,18 +36,18 @@
     .cat-btn:hover, .cat-btn.active { border-color: var(--white); color: var(--white); background: #111; }
 
     /* GRID */
-    .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1px; background: #1a1a1a; animation: fade-up 0.6s 0.2s ease both; }
-    .movie-card { background: var(--black); cursor: pointer; position: relative; overflow: hidden; }
+    .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; background: transparent; padding: 0.5rem; animation: fade-up 0.6s 0.2s ease both; }
+    .movie-card { background: transparent; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; transition: filter 0.2s; }
     .movie-card:hover .movie-overlay { opacity: 1; }
     .movie-card:hover .movie-poster { filter: grayscale(0%); }
-    .movie-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; filter: grayscale(30%); transition: filter 0.2s; }
-    .movie-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 40%, transparent 100%); opacity: 0; transition: opacity 0.2s; display: flex; flex-direction: column; justify-content: flex-end; padding: 0.75rem; }
+    .movie-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; filter: grayscale(30%); transition: filter 0.2s; border-radius: 10px; }
+    .movie-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 40%, transparent 100%); opacity: 0; transition: opacity 0.2s; display: flex; flex-direction: column; justify-content: flex-end; padding: 0.75rem; border-radius: 10px; }
     .movie-play { width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; }
     .movie-play svg { width: 12px; height: 12px; fill: white; stroke: none; }
     .movie-title-overlay { font-size: 0.6rem; letter-spacing: 0.05em; line-height: 1.3; color: var(--white); }
     .movie-year-overlay { font-size: 0.5rem; color: var(--gray); margin-top: 0.2rem; }
     .movie-rating { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.5rem; background: rgba(0,0,0,0.85); padding: 0.2rem 0.4rem; color: var(--gray); }
-    .movie-no-poster { width: 100%; aspect-ratio: 2/3; background: #0f0f0f; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem; }
+    .movie-no-poster { width: 100%; aspect-ratio: 2/3; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem; border-radius: 10px; }
     .movie-no-poster span { font-size: 0.55rem; color: #333; text-align: center; }
 
     .loader { display: flex; align-items: center; justify-content: center; padding: 4rem; gap: 0.5rem; }
@@ -150,13 +150,13 @@
   .modal, .modal-player, .modal-header, .modal-body,
   .episode-sidebar, .sidebar-header, .episode-list { background: rgba(0,0,0,0.75) !important; }
   .about-block { background: rgba(0,0,0,0.3) !important; border-color: rgba(255,255,255,0.1) !important; }
-  .movie-card { background: rgba(0,0,0,0.25) !important; }
+  .movie-card { background: transparent !important; }
   .movie-card:hover { background: rgba(0,0,0,0.4) !important; }
   .game-card { background: rgba(0,0,0,0.25) !important; }
   .ep-item { background: transparent !important; border-color: rgba(255,255,255,0.05) !important; }
   .ep-item:hover { background: rgba(255,255,255,0.07) !important; }
   .ep-item.active { background: rgba(255,255,255,0.1) !important; border-left-color: #fff !important; }
-  .movies-grid, .games-grid { background: rgba(255,255,255,0.05) !important; }
+  .movies-grid, .games-grid { background: transparent !important; }
   .section-label, .page-sub, .row-desc, .movie-year-overlay,
   .movie-rating, .ep-air, .about-key, .about-val,
   .nav-label, .modal-meta, .page-info { color: rgba(255,255,255,0.6) !important; }
@@ -179,6 +179,7 @@
 <div class="page">
   <div class="page-header">
     <h1 class="page-title">Media</h1>
+    <p class="page-sub">Movies &amp; TV — Unblocked</p>
   </div>
   <div class="controls">
     <div class="search-wrap">
@@ -256,6 +257,9 @@
   let activeEpisode = 1;
   let activeTitle   = "";
 
+  // ── KEY INSIGHT FROM OLD CODE:
+  // cinemaOS URLs must NOT be XOR-encoded by UV — just use encodeURIComponent (plain percent-encoding)
+  // UV's XOR encoding is what was mangling "player/tv/" into "pna{ep/vv"
   function cinemaProxy(url) {
     if (typeof __uv$config !== "undefined") {
       return __uv$config.prefix + __uv$config.encodeUrl(url);
