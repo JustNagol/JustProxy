@@ -7,16 +7,16 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --black: #0a0a0a; --white: #f5f5f0; --gray: #888; --dim: #1a1a1a; --border: #2a2a2a; }
+    :root { --black: #0a0a0a; --white: #f5f5f0; --gray: #888; --border: #2a2a2a; }
     html, body { min-height: 100%; background: transparent; color: var(--white); font-family: 'Space Mono', monospace; overflow-x: hidden; }
-    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 200; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
+    body::before { display: none; }
 
     /* NAV */
-    .nav { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; z-index: 300; background: #111; border: 1px solid var(--border); padding: 0.5rem 0.6rem; gap: 0.25rem; }
-    .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; width: 56px; height: 52px; background: transparent; border: none; cursor: pointer; color: #555; transition: color 0.15s, background 0.15s; text-decoration: none; position: relative; }
-    .nav-btn:hover { color: var(--white); background: #1a1a1a; }
-    .nav-btn.active { color: var(--white); }
-    .nav-btn.active::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: var(--white); border-radius: 50%; }
+    .nav { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; z-index: 300; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0.6rem; gap: 0.25rem; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; width: 56px; height: 52px; background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,0.4); transition: color 0.15s, background 0.15s; text-decoration: none; position: relative; }
+    .nav-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .nav-btn.active { color: #fff; }
+    .nav-btn.active::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #fff; border-radius: 50%; }
     .nav-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .nav-label { font-size: 0.45rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
@@ -24,143 +24,66 @@
     .page { min-height: 100vh; padding: 3rem 2rem 8rem; max-width: 700px; margin: 0 auto; }
     .page-header { margin-bottom: 3rem; animation: fade-up 0.6s ease both; }
     .page-title { font-family: 'Instrument Serif', serif; font-style: italic; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.02em; margin-bottom: 0.4rem; }
-    .page-sub { font-size: 0.6rem; color: var(--gray); letter-spacing: 0.2em; text-transform: uppercase; }
+    .page-sub { font-size: 0.6rem; color: rgba(255,255,255,0.5); letter-spacing: 0.2em; text-transform: uppercase; }
 
     /* SECTIONS */
     .section { margin-bottom: 2.5rem; animation: fade-up 0.5s ease both; }
-    .section:nth-child(2) { animation-delay: 0.05s; }
-    .section:nth-child(3) { animation-delay: 0.10s; }
-    .section:nth-child(4) { animation-delay: 0.15s; }
-    .section:nth-child(5) { animation-delay: 0.20s; }
-    .section:nth-child(6) { animation-delay: 0.25s; }
-    .section:nth-child(7) { animation-delay: 0.30s; }
-    .section:nth-child(8) { animation-delay: 0.35s; }
-    .section-label { font-size: 0.5rem; letter-spacing: 0.25em; text-transform: uppercase; color: #444; margin-bottom: 0.6rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+    .section:nth-child(2){animation-delay:.05s}.section:nth-child(3){animation-delay:.1s}
+    .section:nth-child(4){animation-delay:.15s}.section:nth-child(5){animation-delay:.2s}
+    .section:nth-child(6){animation-delay:.25s}.section:nth-child(7){animation-delay:.3s}
+    .section-label { font-size: 0.5rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 0.6rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
 
     /* ROWS */
-    .row { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid #111; gap: 1rem; }
+    .row { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 1rem; }
     .row:last-child { border-bottom: none; }
     .row-info { display: flex; flex-direction: column; gap: 0.25rem; }
-    .row-name { font-size: 0.72rem; color: var(--white); }
-    .row-desc { font-size: 0.52rem; color: #444; letter-spacing: 0.03em; line-height: 1.5; }
+    .row-name { font-size: 0.72rem; color: #fff; }
+    .row-desc { font-size: 0.52rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
     .row-control { flex-shrink: 0; }
 
     /* TOGGLE */
     .toggle { position: relative; width: 40px; height: 22px; cursor: pointer; display: block; }
     .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
-    .toggle-track { position: absolute; inset: 0; background: #1a1a1a; border: 1px solid var(--border); transition: all 0.2s; }
-    .toggle-thumb { position: absolute; top: 4px; left: 4px; width: 12px; height: 12px; background: #444; transition: all 0.2s; pointer-events: none; }
-    .toggle input:checked ~ .toggle-track { background: var(--white); border-color: var(--white); }
-    .toggle input:checked ~ .toggle-thumb { background: var(--black); transform: translateX(18px); }
+    .toggle-track { position: absolute; inset: 0; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; }
+    .toggle-thumb { position: absolute; top: 4px; left: 4px; width: 12px; height: 12px; background: rgba(255,255,255,0.4); transition: all 0.2s; pointer-events: none; }
+    .toggle input:checked ~ .toggle-track { background: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.85); }
+    .toggle input:checked ~ .toggle-thumb { background: #000; transform: translateX(18px); }
 
     /* SELECT */
-    .ctrl-select { background: #111; border: 1px solid var(--border); color: var(--white); font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 0.45rem 0.7rem; outline: none; cursor: pointer; transition: border-color 0.15s; min-width: 160px; }
-    .ctrl-select:hover, .ctrl-select:focus { border-color: var(--white); }
-    .ctrl-select option { background: #111; }
+    .ctrl-select { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 0.45rem 0.7rem; outline: none; cursor: pointer; transition: border-color 0.15s; min-width: 160px; }
+    .ctrl-select:focus { border-color: rgba(255,255,255,0.8); }
+    .ctrl-select option { background: #1a1a1a; color: #fff; }
 
     /* INPUT */
-    .ctrl-input { background: #111; border: 1px solid var(--border); color: var(--white); font-family: 'Space Mono', monospace; font-size: 0.65rem; padding: 0.45rem 0.8rem; outline: none; transition: border-color 0.15s; width: 220px; }
-    .ctrl-input:focus { border-color: var(--white); }
+    .ctrl-input { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-family: 'Space Mono', monospace; font-size: 0.65rem; padding: 0.45rem 0.8rem; outline: none; transition: border-color 0.15s; width: 220px; }
+    .ctrl-input:focus { border-color: rgba(255,255,255,0.8); }
+    .ctrl-input::placeholder { color: rgba(255,255,255,0.25); }
 
     /* BUTTONS */
-    .ctrl-btn { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 1rem; border: 1px solid var(--border); background: transparent; color: #888; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-    .ctrl-btn:hover { border-color: var(--white); color: var(--white); }
-    .ctrl-btn.danger { border-color: #3a1a1a; color: #884444; }
-    .ctrl-btn.danger:hover { border-color: #cc4444; color: #cc4444; }
-    .ctrl-btn.primary { background: var(--white); color: var(--black); border-color: var(--white); }
-    .ctrl-btn.primary:hover { background: var(--gray); border-color: var(--gray); }
+    .ctrl-btn { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.35); color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .ctrl-btn:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); }
 
-    /* PANIC KEY DISPLAY */
+    /* PANIC KEY */
     .key-display { display: flex; align-items: center; gap: 0.5rem; }
-    .key-badge { font-size: 0.6rem; background: #111; border: 1px solid var(--border); padding: 0.3rem 0.6rem; letter-spacing: 0.1em; color: var(--white); min-width: 40px; text-align: center; }
-    .key-record-btn { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.7rem; border: 1px solid var(--border); background: transparent; color: #555; cursor: pointer; transition: all 0.15s; }
-    .key-record-btn:hover, .key-record-btn.recording { border-color: var(--white); color: var(--white); background: #111; }
+    .key-badge { font-size: 0.6rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); padding: 0.3rem 0.6rem; color: #fff; min-width: 40px; text-align: center; }
+    .key-record-btn { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.7rem; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.35); color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.15s; }
+    .key-record-btn:hover, .key-record-btn.recording { border-color: #fff; color: #fff; }
     .key-record-btn.recording { animation: blink 0.8s ease infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.4} }
 
-    /* THEME SWATCHES */
-    .theme-row { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.85rem 0; }
-
-    /* STATUS FLASH */
-    .status-flash { font-size: 0.55rem; color: #555; letter-spacing: 0.1em; height: 1rem; transition: color 0.3s; margin-top: 0.5rem; }
-    .status-flash.ok { color: #44aa66; }
-    .status-flash.err { color: #cc4444; }
-
-    /* ABOUT BLOCK */
-    .about-block { background: #0d0d0d; border: 1px solid var(--dim); padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    /* ABOUT */
+    .about-block { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .about-row { display: flex; justify-content: space-between; }
-    .about-key { font-size: 0.55rem; color: #444; }
-    .about-val { font-size: 0.55rem; color: #666; }
+    .about-key { font-size: 0.55rem; color: rgba(255,255,255,0.35); }
+    .about-val { font-size: 0.55rem; color: rgba(255,255,255,0.6); }
 
-    .corner { position: fixed; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: #2a2a2a; }
+    /* VANTA */
+    canvas.vanta-canvas { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: -1 !important; }
+
+    .corner { position: fixed; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.15); }
     .corner.tl { top: 1.5rem; left: 1.5rem; }
     @keyframes fade-up { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
-  
-  /* ── VANTA READABILITY OVERRIDES ── */
-  * { color: #ffffff !important; }
-  input, select, textarea,
-  .ctrl-select, .ctrl-input, .search-wrap, .search-wrap input,
-  .season-select, #season-select,
-  .cat-btn, .ctrl-btn, .modal-btn, .page-btn, .key-record-btn,
-  .nav-btn, .nav, .modal-header, .modal-player,
-  .sidebar-header, .episode-sidebar,
-  .about-block, .api-prompt,
-  .movie-card, .game-card,
-  .movies-grid, .games-grid,
-  .section, .row, .page, .page-header,
-  .pagination, .controls,
-  .toggle-track { background: transparent !important; }
-  input, select, textarea,
-  .ctrl-select, .ctrl-input, .season-select, #season-select {
-    background: rgba(0,0,0,0.35) !important;
-    border-color: rgba(255,255,255,0.25) !important;
-  }
-  input:focus, select:focus, textarea:focus,
-  .ctrl-select:focus, .ctrl-input:focus, .season-select:focus {
-    border-color: rgba(255,255,255,0.8) !important;
-    background: rgba(0,0,0,0.5) !important;
-  }
-  .nav { background: rgba(0,0,0,0.45) !important; border-color: rgba(255,255,255,0.1) !important; }
-  .nav-btn:hover { background: rgba(255,255,255,0.08) !important; }
-  .cat-btn, .ctrl-btn, .modal-btn, .page-btn, .key-record-btn {
-    background: rgba(0,0,0,0.35) !important;
-    border-color: rgba(255,255,255,0.2) !important;
-  }
-  .cat-btn:hover, .ctrl-btn:hover, .modal-btn:hover, .page-btn:hover,
-  .cat-btn.active, .ctrl-btn.primary {
-    background: rgba(255,255,255,0.15) !important;
-    border-color: rgba(255,255,255,0.7) !important;
-  }
-  .ctrl-btn.primary { background: rgba(255,255,255,0.9) !important; color: #000 !important; }
-  .ctrl-btn.danger { border-color: rgba(200,80,80,0.5) !important; }
-  .ctrl-btn.danger:hover { border-color: rgba(200,80,80,0.9) !important; }
-  .toggle-track { background: rgba(0,0,0,0.4) !important; border-color: rgba(255,255,255,0.2) !important; }
-  input:checked ~ .toggle-track { background: rgba(255,255,255,0.85) !important; }
-  .toggle-thumb { background: rgba(255,255,255,0.4) !important; }
-  input:checked ~ .toggle-thumb { background: #000 !important; }
-  .modal, .modal-player, .modal-header, .modal-body,
-  .episode-sidebar, .sidebar-header, .episode-list { background: rgba(0,0,0,0.75) !important; }
-  .about-block { background: rgba(0,0,0,0.3) !important; border-color: rgba(255,255,255,0.1) !important; }
-  .movie-card { background: rgba(0,0,0,0.25) !important; }
-  .movie-card:hover { background: rgba(0,0,0,0.4) !important; }
-  .game-card { background: rgba(0,0,0,0.25) !important; }
-  .ep-item { background: transparent !important; border-color: rgba(255,255,255,0.05) !important; }
-  .ep-item:hover { background: rgba(255,255,255,0.07) !important; }
-  .ep-item.active { background: rgba(255,255,255,0.1) !important; border-left-color: #fff !important; }
-  .movies-grid, .games-grid { background: rgba(255,255,255,0.05) !important; }
-  .section-label, .page-sub, .row-desc, .movie-year-overlay,
-  .movie-rating, .ep-air, .about-key, .about-val,
-  .nav-label, .modal-meta, .page-info { color: rgba(255,255,255,0.6) !important; }
-  .loader-dot { background: rgba(255,255,255,0.3) !important; }
-  ::placeholder { color: rgba(255,255,255,0.3) !important; }
-  canvas.vanta-canvas { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: -1 !important; }
-  html, body { min-height: 100% !important; }
-
-  select option { background: #1a1a1a !important; color: #fff !important; }
-
-</style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+  </style>
 </head>
 <body>
 <span class="corner tl">Astriex</span>
@@ -218,7 +141,7 @@
     <div class="row">
       <div class="row-info">
         <span class="row-name">Cloak Favicon</span>
-        <span class="row-desc">URL to use as the favicon image</span>
+        <span class="row-desc">Icon shown in the browser tab</span>
       </div>
       <div class="row-control">
         <select class="ctrl-select" id="cloak-favicon">
@@ -252,7 +175,7 @@
     <div class="row">
       <div class="row-info">
         <span class="row-name">Panic Key</span>
-        <span class="row-desc">Click "Record" then press any key to set it</span>
+        <span class="row-desc">Click "Record" then press any key</span>
       </div>
       <div class="row-control">
         <div class="key-display">
@@ -264,7 +187,7 @@
     <div class="row">
       <div class="row-info">
         <span class="row-name">Panic URL</span>
-        <span class="row-desc">Where to go when panic key is pressed</span>
+        <span class="row-desc">Where to redirect when panic key is pressed</span>
       </div>
       <div class="row-control">
         <select class="ctrl-select" id="panic-url">
@@ -278,9 +201,7 @@
       </div>
     </div>
     <div class="row" id="panic-custom-row" style="display:none">
-      <div class="row-info">
-        <span class="row-name">Custom Panic URL</span>
-      </div>
+      <div class="row-info"><span class="row-name">Custom Panic URL</span></div>
       <div class="row-control">
         <input class="ctrl-input" id="panic-custom-url" type="text" placeholder="https://..." />
       </div>
@@ -305,7 +226,7 @@
     </div>
   </div>
 
-  <!-- LAUNCH IN ABOUT:BLANK -->
+  <!-- STEALTH LAUNCH -->
   <div class="section">
     <p class="section-label">Stealth Launch</p>
     <div class="row">
@@ -314,13 +235,13 @@
         <span class="row-desc">Opens Astriex inside an about:blank tab to hide the URL</span>
       </div>
       <div class="row-control">
-        <button class="ctrl-btn" onclick="launchAboutBlank()">Launch</button>
+        <button class="ctrl-btn" onclick="doLaunchBlank()">Launch</button>
       </div>
     </div>
     <div class="row">
       <div class="row-info">
-        <span class="row-name">about:blank Cloak</span>
-        <span class="row-desc">Auto-open in about:blank every time</span>
+        <span class="row-name">Always open in about:blank</span>
+        <span class="row-desc">Auto-launches on every visit</span>
       </div>
       <div class="row-control">
         <label class="toggle">
@@ -341,7 +262,6 @@
       <div class="about-row"><span class="about-key">Service Worker</span><span class="about-val" id="sw-status">checking...</span></div>
     </div>
   </div>
-
 </div>
 
 <nav class="nav">
@@ -351,93 +271,44 @@
   <a class="nav-btn active" href="/settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="nav-label">Settings</span></a>
 </nav>
 
+<script src="/global.js"></script>
 <script>
-  // ── STORAGE HELPERS ──
-  const S = {
-    get: (k, def) => { try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); } catch { return def; } },
-    set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
-  };
-
-  // ── LOAD ALL SETTINGS ──
-  function loadSettings() {
-    // Search engine
-    document.getElementById("search-engine").value = S.get("astriex_search", "https://www.google.com/search?q=");
-
-    // Tab cloak
-    document.getElementById("cloak-enabled").checked = S.get("astriex_cloak_enabled", false);
-    document.getElementById("cloak-title").value     = S.get("astriex_cloak_title", "");
-    document.getElementById("cloak-favicon").value   = S.get("astriex_cloak_favicon", "");
-
-    // Panic
-    document.getElementById("panic-enabled").checked = S.get("astriex_panic_enabled", false);
-    document.getElementById("panic-url").value        = S.get("astriex_panic_url", "https://classroom.google.com");
-    const panicKey = S.get("astriex_panic_key", "");
-    document.getElementById("panic-key-display").textContent = panicKey || "—";
-    document.getElementById("panic-custom-url").value = S.get("astriex_panic_custom_url", "");
-
-    // Anti close
-    document.getElementById("anti-close").checked = S.get("astriex_anti_close", false);
-
-    // Always blank
-    document.getElementById("always-blank").checked = S.get("astriex_always_blank", false);
-
-    // Theme
-    const theme = S.get("astriex_theme", "default");
-    document.querySelectorAll("
-
-  // ── SAVE ON CHANGE (auto-save everything) ──
-  document.getElementById("search-engine").addEventListener("change", e => S.set("astriex_search", e.target.value));
-
-  document.getElementById("cloak-enabled").addEventListener("change", e => {
-    S.set("astriex_cloak_enabled", e.target.checked);
-    applyCloak();
-  });
-  document.getElementById("cloak-title").addEventListener("input", e => {
-    S.set("astriex_cloak_title", e.target.value);
-    if (S.get("astriex_cloak_enabled")) applyCloak();
-  });
-  document.getElementById("cloak-favicon").addEventListener("change", e => {
-    S.set("astriex_cloak_favicon", e.target.value);
-    if (S.get("astriex_cloak_enabled")) applyCloak();
-  });
-
-  document.getElementById("panic-enabled").addEventListener("change", e => S.set("astriex_panic_enabled", e.target.checked));
-  document.getElementById("panic-url").addEventListener("change", e => {
-    S.set("astriex_panic_url", e.target.value);
-    toggleCustomPanicRow();
-  });
-  document.getElementById("panic-custom-url").addEventListener("input", e => S.set("astriex_panic_custom_url", e.target.value));
-
-  document.getElementById("anti-close").addEventListener("change", e => {
-    S.set("astriex_anti_close", e.target.checked);
-    applyAntiClose();
-  });
-
-  document.getElementById("always-blank").addEventListener("change", e => {
-    S.set("astriex_always_blank", e.target.checked);
-    applyAlwaysBlank();
-  });
-
-  // ── TAB CLOAK ──
-  function applyCloak() {
-    const enabled = S.get("astriex_cloak_enabled", false);
-    const title   = S.get("astriex_cloak_title", "");
-    const favicon = S.get("astriex_cloak_favicon", "");
-    if (enabled) {
-      if (title) document.title = title;
-      if (favicon) {
-        let link = document.querySelector("link[rel*='icon']") || document.createElement("link");
-        link.type = "image/x-icon";
-        link.rel  = "shortcut icon";
-        link.href = favicon;
-        document.head.appendChild(link);
-      }
-    } else {
-      document.title = "Settings — Astriex";
-    }
+  // ── SIMPLE STORAGE HELPERS (direct localStorage, no dependency on global.js timing) ──
+  function load(k, def) {
+    try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); } catch { return def; }
+  }
+  function save(k, v) {
+    localStorage.setItem(k, JSON.stringify(v));
   }
 
-  // ── PANIC KEY ──
+  // ── POPULATE ALL FIELDS FROM LOCALSTORAGE ──
+  function loadSettings() {
+    document.getElementById("search-engine").value    = load("astriex_search", "https://www.google.com/search?q=");
+    document.getElementById("cloak-enabled").checked  = load("astriex_cloak_enabled", false);
+    document.getElementById("cloak-title").value      = load("astriex_cloak_title", "");
+    document.getElementById("cloak-favicon").value    = load("astriex_cloak_favicon", "");
+    document.getElementById("panic-enabled").checked  = load("astriex_panic_enabled", false);
+    document.getElementById("panic-url").value        = load("astriex_panic_url", "https://classroom.google.com");
+    document.getElementById("panic-key-display").textContent = load("astriex_panic_key", "") || "—";
+    document.getElementById("panic-custom-url").value = load("astriex_panic_custom_url", "");
+    document.getElementById("anti-close").checked     = load("astriex_anti_close", false);
+    document.getElementById("always-blank").checked   = load("astriex_always_blank", false);
+    toggleCustomPanicRow();
+    checkSW();
+  }
+
+  // ── AUTO-SAVE EVERY INPUT ──
+  document.getElementById("search-engine").addEventListener("change",  e => save("astriex_search", e.target.value));
+  document.getElementById("cloak-enabled").addEventListener("change",  e => save("astriex_cloak_enabled", e.target.checked));
+  document.getElementById("cloak-title").addEventListener("input",     e => save("astriex_cloak_title", e.target.value));
+  document.getElementById("cloak-favicon").addEventListener("change",  e => save("astriex_cloak_favicon", e.target.value));
+  document.getElementById("panic-enabled").addEventListener("change",  e => save("astriex_panic_enabled", e.target.checked));
+  document.getElementById("panic-url").addEventListener("change",      e => { save("astriex_panic_url", e.target.value); toggleCustomPanicRow(); });
+  document.getElementById("panic-custom-url").addEventListener("input",e => save("astriex_panic_custom_url", e.target.value));
+  document.getElementById("anti-close").addEventListener("change",     e => save("astriex_anti_close", e.target.checked));
+  document.getElementById("always-blank").addEventListener("change",   e => save("astriex_always_blank", e.target.checked));
+
+  // ── PANIC KEY RECORDING ──
   let recording = false;
 
   function startRecording() {
@@ -451,92 +322,58 @@
     if (recording) {
       e.preventDefault();
       const key = e.key === " " ? "Space" : e.key;
-      S.set("astriex_panic_key", key);
+      save("astriex_panic_key", key);
       document.getElementById("panic-key-display").textContent = key;
       recording = false;
       const btn = document.getElementById("panic-record-btn");
       btn.textContent = "Record";
       btn.classList.remove("recording");
-      return;
-    }
-    // Panic trigger
-    if (S.get("astriex_panic_enabled", false)) {
-      const savedKey = S.get("astriex_panic_key", "");
-      if (savedKey && e.key === savedKey) {
-        const url = S.get("astriex_panic_url", "https://classroom.google.com");
-        const dest = url === "custom" ? S.get("astriex_panic_custom_url", "https://www.google.com") : url;
-        window.location.replace(dest);
-      }
     }
   });
 
   function toggleCustomPanicRow() {
-    const val = document.getElementById("panic-url").value;
-    document.getElementById("panic-custom-row").style.display = val === "custom" ? "flex" : "none";
+    document.getElementById("panic-custom-row").style.display =
+      document.getElementById("panic-url").value === "custom" ? "flex" : "none";
   }
 
-  // ── ANTI CLOSE ──
-  let antiCloseHandler = null;
-
-  function applyAntiClose() {
-    if (antiCloseHandler) { window.removeEventListener("beforeunload", antiCloseHandler); antiCloseHandler = null; }
-    if (S.get("astriex_anti_close", false)) {
-      antiCloseHandler = e => { e.preventDefault(); e.returnValue = ""; };
-      window.addEventListener("beforeunload", antiCloseHandler);
-    }
-  }
-
-  // ── LAUNCH IN ABOUT:BLANK ──
-  function launchAboutBlank() {
-    const w = window.open("about:blank", "_blank");
-    if (!w) { alert("Pop-up blocked! Allow pop-ups for this site."); return; }
-    const title = S.get("astriex_cloak_title","") || "Astriex";
-    const html = '<!DOCTYPE html><html><head><title>' + title + '</title></head><body style="margin:0;padding:0;overflow:hidden;background:#000"><iframe src="' + location.origin + '/index.html" style="width:100vw;height:100vh;border:none;display:block" allowfullscreen></iframe></body></html>';
-    w.document.open();
-    w.document.write(html);
+  // ── ABOUT:BLANK LAUNCH ──
+  function doLaunchBlank() {
+    const w = window.open("", "_blank");
+    if (!w) { alert("Pop-up blocked — allow pop-ups for this site."); return; }
+    const cloakTitle = load("astriex_cloak_title", "") || "Astriex";
+    w.document.write(
+      '<!DOCTYPE html><html><head><title>' + cloakTitle + '</title></head>' +
+      '<body style="margin:0;padding:0;background:#000;overflow:hidden">' +
+      '<iframe src="' + location.origin + '/index.html" ' +
+      'style="position:fixed;inset:0;width:100%;height:100%;border:none" allowfullscreen>' +
+      '</iframe></body></html>'
+    );
     w.document.close();
   }
 
-  function applyAlwaysBlank() {
-    // Store flag — index.html reads it and auto-launches
-    // (index.html should check S.get("astriex_always_blank") and call launchAboutBlank on load)
-  }
-
-  // ── SERVICE WORKER ──
+  // ── SERVICE WORKER STATUS ──
   function checkSW() {
-    if (!("serviceWorker" in navigator)) { document.getElementById("sw-status").textContent = "not supported"; return; }
+    if (!("serviceWorker" in navigator)) {
+      document.getElementById("sw-status").textContent = "not supported";
+      return;
+    }
     navigator.serviceWorker.getRegistration("/uv/service/").then(reg => {
       document.getElementById("sw-status").textContent = reg ? "active ✓" : "not registered";
     });
   }
 
-  // ── FLASH HELPER ──
-  function flash(id, msg, type) {
-    const el = document.getElementById(id);
-    el.textContent = msg;
-    el.className = "status-flash " + type;
-    setTimeout(() => { el.textContent = ""; el.className = "status-flash"; }, 4000);
-  }
-
   // ── INIT ──
   loadSettings();
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
 <script>
   VANTA.CLOUDS({
-    el: "body",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    backgroundColor: 0x333333,
-    skyColor: 0x292929,
-    cloudColor: 0x444444,
-    cloudShadowColor: 0x818181,
-    sunColor: 0x747474,
-    sunGlareColor: 0x7c7c7c,
-    sunlightColor: 0x474747,
-    speed: 1.60
+    el: "body", mouseControls: true, touchControls: true, gyroControls: false,
+    minHeight: 200, minWidth: 200, backgroundColor: 0x333333, skyColor: 0x292929,
+    cloudColor: 0x444444, cloudShadowColor: 0x818181, sunColor: 0x747474,
+    sunGlareColor: 0x7c7c7c, sunlightColor: 0x474747, speed: 1.60
   });
 </script>
 </body>
