@@ -6,6 +6,12 @@
     "file": "/games/files/drive-mad/index.html"
   },
   {
+    "id": "geoguessr",
+    "title": "GeoGuessr",
+    "thumbnail": "/games/thumbs/geog.jpg",
+    "url": "https://www.worldguessr.com/"
+  },
+  {
     "id": "gta-vice-city",
     "title": "GTA Vice City",
     "thumbnail": "/games/thumbs/vicecity.jpg",
