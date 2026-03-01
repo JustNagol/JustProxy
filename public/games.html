@@ -189,6 +189,10 @@
     return "/uv/service/" + encodeURIComponent(url);
   }
 
+  function cinemaProxy(url) {
+    return "/uv/service/" + encodeURIComponent(url);
+  }
+
     async function loadGames() {
     const override = window.ASTRIEX_GAMES_OVERRIDE;
     if (override) { allGames = override; renderGames(allGames); document.getElementById('controls').style.display = 'flex'; return; }
@@ -248,7 +252,15 @@
     document.getElementById("modal-title").textContent = game.title;
     document.getElementById("game-modal").classList.add("open");
     document.body.style.overflow = "hidden";
-    document.getElementById("game-iframe").src = game.file;
+    const iframe = document.getElementById("game-iframe");
+    if (game.url) {
+      // External URL — run through UV proxy
+      const prefix = (typeof __uv$config !== "undefined") ? __uv$config.prefix : "/uv/service/";
+      const encode = (typeof __uv$config !== "undefined") ? __uv$config.encodeUrl : encodeURIComponent;
+      iframe.src = prefix + encode(game.url);
+    } else if (game.file) {
+      iframe.src = game.file;
+    }
   }
 
   function closeGame() {
