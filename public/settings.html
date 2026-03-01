@@ -8,7 +8,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --black: #0a0a0a; --white: #f5f5f0; --gray: #888; --dim: #1a1a1a; --border: #2a2a2a; }
-    html, body { height: 100%; background: var(--black); color: var(--white); font-family: 'Space Mono', monospace; overflow-x: hidden; }
+    html, body { min-height: 100%; background: transparent; color: var(--white); font-family: 'Space Mono', monospace; overflow-x: hidden; }
     body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 200; opacity: 0.35; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
 
     /* NAV */
@@ -80,10 +80,6 @@
 
     /* THEME SWATCHES */
     .theme-row { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.85rem 0; }
-    .theme-swatch { width: 36px; height: 36px; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s, transform 0.15s; position: relative; }
-    .theme-swatch:hover { transform: scale(1.1); }
-    .theme-swatch.active { border-color: var(--white); }
-    .theme-swatch.active::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--white); text-shadow: 0 0 4px #000; }
 
     /* STATUS FLASH */
     .status-flash { font-size: 0.55rem; color: #555; letter-spacing: 0.1em; height: 1rem; transition: color 0.3s; margin-top: 0.5rem; }
@@ -99,7 +95,72 @@
     .corner { position: fixed; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: #2a2a2a; }
     .corner.tl { top: 1.5rem; left: 1.5rem; }
     @keyframes fade-up { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
-  </style>
+  
+  /* ── VANTA READABILITY OVERRIDES ── */
+  * { color: #ffffff !important; }
+  input, select, textarea,
+  .ctrl-select, .ctrl-input, .search-wrap, .search-wrap input,
+  .season-select, #season-select,
+  .cat-btn, .ctrl-btn, .modal-btn, .page-btn, .key-record-btn,
+  .nav-btn, .nav, .modal-header, .modal-player,
+  .sidebar-header, .episode-sidebar,
+  .about-block, .api-prompt,
+  .movie-card, .game-card,
+  .movies-grid, .games-grid,
+  .section, .row, .page, .page-header,
+  .pagination, .controls,
+  .toggle-track { background: transparent !important; }
+  input, select, textarea,
+  .ctrl-select, .ctrl-input, .season-select, #season-select {
+    background: rgba(0,0,0,0.35) !important;
+    border-color: rgba(255,255,255,0.25) !important;
+  }
+  input:focus, select:focus, textarea:focus,
+  .ctrl-select:focus, .ctrl-input:focus, .season-select:focus {
+    border-color: rgba(255,255,255,0.8) !important;
+    background: rgba(0,0,0,0.5) !important;
+  }
+  .nav { background: rgba(0,0,0,0.45) !important; border-color: rgba(255,255,255,0.1) !important; }
+  .nav-btn:hover { background: rgba(255,255,255,0.08) !important; }
+  .cat-btn, .ctrl-btn, .modal-btn, .page-btn, .key-record-btn {
+    background: rgba(0,0,0,0.35) !important;
+    border-color: rgba(255,255,255,0.2) !important;
+  }
+  .cat-btn:hover, .ctrl-btn:hover, .modal-btn:hover, .page-btn:hover,
+  .cat-btn.active, .ctrl-btn.primary {
+    background: rgba(255,255,255,0.15) !important;
+    border-color: rgba(255,255,255,0.7) !important;
+  }
+  .ctrl-btn.primary { background: rgba(255,255,255,0.9) !important; color: #000 !important; }
+  .ctrl-btn.danger { border-color: rgba(200,80,80,0.5) !important; }
+  .ctrl-btn.danger:hover { border-color: rgba(200,80,80,0.9) !important; }
+  .toggle-track { background: rgba(0,0,0,0.4) !important; border-color: rgba(255,255,255,0.2) !important; }
+  input:checked ~ .toggle-track { background: rgba(255,255,255,0.85) !important; }
+  .toggle-thumb { background: rgba(255,255,255,0.4) !important; }
+  input:checked ~ .toggle-thumb { background: #000 !important; }
+  .modal, .modal-player, .modal-header, .modal-body,
+  .episode-sidebar, .sidebar-header, .episode-list { background: rgba(0,0,0,0.75) !important; }
+  .about-block { background: rgba(0,0,0,0.3) !important; border-color: rgba(255,255,255,0.1) !important; }
+  .movie-card { background: rgba(0,0,0,0.25) !important; }
+  .movie-card:hover { background: rgba(0,0,0,0.4) !important; }
+  .game-card { background: rgba(0,0,0,0.25) !important; }
+  .ep-item { background: transparent !important; border-color: rgba(255,255,255,0.05) !important; }
+  .ep-item:hover { background: rgba(255,255,255,0.07) !important; }
+  .ep-item.active { background: rgba(255,255,255,0.1) !important; border-left-color: #fff !important; }
+  .movies-grid, .games-grid { background: rgba(255,255,255,0.05) !important; }
+  .section-label, .page-sub, .row-desc, .movie-year-overlay,
+  .movie-rating, .ep-air, .about-key, .about-val,
+  .nav-label, .modal-meta, .page-info { color: rgba(255,255,255,0.6) !important; }
+  .loader-dot { background: rgba(255,255,255,0.3) !important; }
+  ::placeholder { color: rgba(255,255,255,0.3) !important; }
+  canvas.vanta-canvas { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: -1 !important; }
+  html, body { min-height: 100% !important; }
+
+  select option { background: #1a1a1a !important; color: #fff !important; }
+
+</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
 </head>
 <body>
 <span class="corner tl">Astriex</span>
@@ -127,26 +188,6 @@
           <option value="https://search.yahoo.com/search?p=">Yahoo</option>
         </select>
       </div>
-    </div>
-  </div>
-
-  <!-- THEMES -->
-  <div class="section">
-    <p class="section-label">Theme</p>
-    <div class="row" style="border-bottom:none; padding-bottom:0;">
-      <div class="row-info">
-        <span class="row-name">Accent Color</span>
-        <span class="row-desc">Tints the nav active indicator and highlights</span>
-      </div>
-    </div>
-    <div class="theme-row" id="theme-swatches">
-      <div class="theme-swatch active" data-theme="default" style="background:#f5f5f0;" title="Default"></div>
-      <div class="theme-swatch" data-theme="red"     style="background:#cc4444;" title="Red"></div>
-      <div class="theme-swatch" data-theme="amber"   style="background:#d4942a;" title="Amber"></div>
-      <div class="theme-swatch" data-theme="green"   style="background:#44aa66;" title="Green"></div>
-      <div class="theme-swatch" data-theme="blue"    style="background:#4488cc;" title="Blue"></div>
-      <div class="theme-swatch" data-theme="purple"  style="background:#8844cc;" title="Purple"></div>
-      <div class="theme-swatch" data-theme="pink"    style="background:#cc4488;" title="Pink"></div>
     </div>
   </div>
 
@@ -292,8 +333,6 @@
     </div>
   </div>
 
-  <!-- GAMES DATA -->
-
   <!-- ABOUT -->
   <div class="section">
     <p class="section-label">About</p>
@@ -345,20 +384,7 @@
 
     // Theme
     const theme = S.get("astriex_theme", "default");
-    document.querySelectorAll(".theme-swatch").forEach(s => s.classList.toggle("active", s.dataset.theme === theme));
-    applyTheme(theme);
-
-    // Panic custom url row
-    toggleCustomPanicRow();
-
-    // SW status
-    checkSW();
-
-    // Apply active settings
-    applyCloak();
-    applyAntiClose();
-    applyAlwaysBlank();
-  }
+    document.querySelectorAll("
 
   // ── SAVE ON CHANGE (auto-save everything) ──
   document.getElementById("search-engine").addEventListener("change", e => S.set("astriex_search", e.target.value));
@@ -392,29 +418,6 @@
     S.set("astriex_always_blank", e.target.checked);
     applyAlwaysBlank();
   });
-
-  // ── THEME ──
-  const THEME_COLORS = {
-    default: "#f5f5f0", red: "#cc4444", amber: "#d4942a",
-    green: "#44aa66", blue: "#4488cc", purple: "#8844cc", pink: "#cc4488"
-  };
-
-  document.querySelectorAll(".theme-swatch").forEach(swatch => {
-    swatch.addEventListener("click", () => {
-      const theme = swatch.dataset.theme;
-      S.set("astriex_theme", theme);
-      document.querySelectorAll(".theme-swatch").forEach(s => s.classList.remove("active"));
-      swatch.classList.add("active");
-      applyTheme(theme);
-    });
-  });
-
-  function applyTheme(theme) {
-    const color = THEME_COLORS[theme] || THEME_COLORS.default;
-    document.documentElement.style.setProperty("--accent", color);
-    // Update nav active dot color across all pages via localStorage
-    // (each page reads astriex_theme on load)
-  }
 
   // ── TAB CLOAK ──
   function applyCloak() {
@@ -488,7 +491,27 @@
   function launchAboutBlank() {
     const w = window.open("about:blank", "_blank");
     if (!w) { alert("Pop-up blocked! Allow pop-ups for this site."); return; }
-    const html = `<!DOCTYPE html><html><head><title>${S.get("astriex_cloak_title","") || "Astriex"}</title></head><body style="margin:0;padding:0;overflow:hidden;background:#000"><iframe src="${location.origin}/index.html" style="width:100vw;height:100vh;border:none;display:block" allowfullscreen></iframe></body></html>`;
+    const html = `<!DOCTYPE html><html><head><title>${S.get("astriex_cloak_title","") || "Astriex"}</title>  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+</head><body style="margin:0;padding:0;overflow:hidden;background:#000"><iframe src="${location.origin}/index.html" style="width:100vw;height:100vh;border:none;display:block" allowfullscreen></iframe><script>
+  VANTA.CLOUDS({
+    el: "body",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    backgroundColor: 0x333333,
+    skyColor: 0x292929,
+    cloudColor: 0x444444,
+    cloudShadowColor: 0x818181,
+    sunColor: 0x747474,
+    sunGlareColor: 0x7c7c7c,
+    sunlightColor: 0x474747,
+    speed: 1.60
+  });
+</script>
+</body></html>`;
     w.document.open();
     w.document.write(html);
     w.document.close();
@@ -497,39 +520,6 @@
   function applyAlwaysBlank() {
     // Store flag — index.html reads it and auto-launches
     // (index.html should check S.get("astriex_always_blank") and call launchAboutBlank on load)
-  }
-
-  // ── GAMES EXPORT ──
-  async function exportGames() {
-    try {
-      const res  = await fetch("/games/games-list.json");
-      const data = await res.json();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement("a");
-      a.href     = url; a.download = "games-list.json"; a.click();
-      URL.revokeObjectURL(url);
-      flash("games-status", "Exported successfully.", "ok");
-    } catch(e) {
-      flash("games-status", "Export failed: " + e.message, "err");
-    }
-  }
-
-  // ── GAMES IMPORT ──
-  async function importGames(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    try {
-      const text = await file.text();
-      const data = JSON.parse(text);
-      if (!Array.isArray(data)) throw new Error("Invalid format — must be an array.");
-      // Merge with localStorage cache (actual file merge requires server — save to localStorage as override)
-      S.set("astriex_games_override", data);
-      flash("games-status", `Imported ${data.length} game(s). Reload games page to apply.`, "ok");
-    } catch(e) {
-      flash("games-status", "Import failed: " + e.message, "err");
-    }
-    event.target.value = "";
   }
 
   // ── SERVICE WORKER ──
@@ -550,6 +540,24 @@
 
   // ── INIT ──
   loadSettings();
+</script>
+<script>
+  VANTA.CLOUDS({
+    el: "body",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    backgroundColor: 0x333333,
+    skyColor: 0x292929,
+    cloudColor: 0x444444,
+    cloudShadowColor: 0x818181,
+    sunColor: 0x747474,
+    sunGlareColor: 0x7c7c7c,
+    sunlightColor: 0x474747,
+    speed: 1.60
+  });
 </script>
 </body>
 </html>
