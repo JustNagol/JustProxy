@@ -184,7 +184,12 @@
     else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
   }
 
-  async function loadGames() {
+  function proxyUrl(url) {
+    if (typeof __uv$config !== "undefined") return __uv$config.prefix + __uv$config.encodeUrl(url);
+    return "/uv/service/" + encodeURIComponent(url);
+  }
+
+    async function loadGames() {
     const override = window.ASTRIEX_GAMES_OVERRIDE;
     if (override) { allGames = override; renderGames(allGames); document.getElementById('controls').style.display = 'flex'; return; }
     try {
@@ -279,6 +284,8 @@
     speed: 1.60
   });
 </script>
+<script src="/uv/uv.bundle.js"></script>
+<script src="/uv/uv.config.js"></script>
 <script src="/global.js"></script>
 </body>
 </html>
