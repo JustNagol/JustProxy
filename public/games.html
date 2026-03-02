@@ -202,6 +202,7 @@
 <div class="page">
   <div class="page-header">
     <h1 class="page-title">Games</h1>
+    <p class="page-sub">Unblocked — Play anything</p>
   </div>
 
   <div class="controls" id="controls" style="display:none">
@@ -283,7 +284,7 @@
     // Suggest card first
     const suggestCard = document.createElement("a");
     suggestCard.className = "suggest-card";
-    suggestCard.href = "https://forms.gle/ZHhb7cynETk2pXM76";
+    suggestCard.href = "https://forms.gle/YOUR_FORM_ID";
     suggestCard.target = "_blank";
     suggestCard.rel = "noopener";
     suggestCard.innerHTML = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="suggest-label">Suggest Game</span>`;
@@ -376,6 +377,7 @@
     document.getElementById("add-title").value = "";
     document.getElementById("add-thumb-url").value = "";
     document.getElementById("add-paste").value = "";
+    document.getElementById("submit-url").value = "";
     document.getElementById("upload-chosen").textContent = "";
     document.getElementById("thumb-preview").innerHTML = '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
     uploadedFileContent = null;
@@ -385,7 +387,7 @@
   function switchAddTab(tab) {
     addTab = tab;
     document.querySelectorAll(".add-tab").forEach((t, i) => {
-      t.classList.toggle("active", ["url","upload","paste"][i] === tab);
+      t.classList.toggle("active", ["url","upload","paste","submit"][i] === tab);
     });
     document.querySelectorAll(".add-pane").forEach(p => p.classList.remove("active"));
     document.getElementById("add-pane-" + tab).classList.add("active");
@@ -461,6 +463,24 @@
       if (!html) { alert("Please paste some HTML."); return; }
       game.blobContent = html;
       game.file = "_blob_";
+    } else if (addTab === "submit") {
+      const url = document.getElementById("submit-url").value.trim();
+      if (!url) { alert("Please enter a URL to submit."); return; }
+      // POST to backend for review
+      try {
+        const r = await fetch("/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, url, thumbnail: thumbDataUrl || document.getElementById("add-thumb-url").value.trim() || null })
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || "Failed");
+        closeAddModal();
+        alert("Submitted for review! It will appear on the site if approved.");
+      } catch(e) {
+        alert("Submission failed: " + e.message);
+      }
+      return;
     }
 
     const existing = getUserGames();
@@ -499,6 +519,7 @@
       <button class="add-tab active" onclick="switchAddTab('url')">Link / URL</button>
       <button class="add-tab" onclick="switchAddTab('upload')">Upload HTML</button>
       <button class="add-tab" onclick="switchAddTab('paste')">Paste HTML</button>
+      <button class="add-tab" onclick="switchAddTab('submit')">Submit to Site</button>
     </div>
 
     <!-- URL pane -->
@@ -524,6 +545,15 @@
       <div class="add-field">
         <label class="add-label">Paste HTML Code</label>
         <textarea class="add-input add-textarea" id="add-paste" placeholder="<!DOCTYPE html>..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit pane -->
+    <div class="add-pane" id="add-pane-submit">
+      <div style="font-size:0.58rem;color:rgba(255,255,255,0.5);line-height:1.7;">Submit your game for review. If approved, it will appear on the site for everyone. Only URL-based games can be submitted.</div>
+      <div class="add-field">
+        <label class="add-label">Game URL</label>
+        <input class="add-input" id="submit-url" type="text" placeholder="https://game-site.com" />
       </div>
     </div>
 
