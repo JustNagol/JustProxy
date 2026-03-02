@@ -1,5 +1,4 @@
-// ── ASTRIEX GLOBAL.JS ──
-// Loaded on every page. Applies persistent settings from localStorage.
+
 
 (function () {
   function load(k, def) {
@@ -11,7 +10,8 @@
   // ── TAB CLOAK ──
   if (load("astriex_cloak_enabled", false)) {
     const title   = load("astriex_cloak_title", "");
-    const favicon = load("astriex_cloak_favicon", "");
+    const _fav = load("astriex_cloak_favicon", "");
+    const favicon = _fav === "custom" ? load("astriex_cloak_favicon_custom", "") : _fav;
     if (title) document.title = title;
     if (favicon) {
       let link = document.querySelector("link[rel*='icon']");
