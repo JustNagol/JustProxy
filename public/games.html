@@ -444,7 +444,7 @@
     reloadGames();
   }
 
-  function saveGame() {
+  async function saveGame() {
     const title = document.getElementById("add-title").value.trim();
     if (!title) { alert("Please enter a title."); return; }
 
