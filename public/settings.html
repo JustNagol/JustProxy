@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Astriex</title>
+  <title>Settings — Astriex</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -143,15 +144,17 @@
         <span class="row-name">Cloak Favicon</span>
         <span class="row-desc">Icon shown in the browser tab</span>
       </div>
-      <div class="row-control">
-        <select class="ctrl-select" id="cloak-favicon">
+      <div class="row-control" style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end;">
+        <select class="ctrl-select" id="cloak-favicon" onchange="onFaviconSelect()">
           <option value="">— none —</option>
           <option value="https://www.google.com/favicon.ico">Google</option>
           <option value="https://ssl.gstatic.com/classroom/favicon.png">Google Classroom</option>
           <option value="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">Google Drive</option>
           <option value="https://www.gstatic.com/images/branding/product/1x/docs_2020q4_32dp.png">Google Docs</option>
           <option value="https://www.bing.com/favicon.ico">Bing</option>
+          <option value="custom">Custom URL...</option>
         </select>
+        <input class="ctrl-input" id="cloak-favicon-custom" type="text" placeholder="https://site.com/favicon.ico" style="display:none;width:220px;" oninput="save('astriex_cloak_favicon_custom', this.value)" />
       </div>
     </div>
   </div>
@@ -281,12 +284,32 @@
     localStorage.setItem(k, JSON.stringify(v));
   }
 
+  function onFaviconSelect() {
+    const val = document.getElementById("cloak-favicon").value;
+    const customInput = document.getElementById("cloak-favicon-custom");
+    if (val === "custom") {
+      customInput.style.display = "block";
+      save("astriex_cloak_favicon", customInput.value);
+    } else {
+      customInput.style.display = "none";
+      save("astriex_cloak_favicon", val);
+    }
+  }
+
   // ── POPULATE ALL FIELDS FROM LOCALSTORAGE ──
   function loadSettings() {
     document.getElementById("search-engine").value    = load("astriex_search", "https://www.google.com/search?q=");
     document.getElementById("cloak-enabled").checked  = load("astriex_cloak_enabled", false);
     document.getElementById("cloak-title").value      = load("astriex_cloak_title", "");
-    document.getElementById("cloak-favicon").value    = load("astriex_cloak_favicon", "");
+    const savedFavicon = load("astriex_cloak_favicon", "");
+    const customFavicons = ["https://www.google.com/favicon.ico","https://ssl.gstatic.com/classroom/favicon.png","https://www.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png","https://www.gstatic.com/images/branding/product/1x/docs_2020q4_32dp.png","https://www.bing.com/favicon.ico",""];
+    if (savedFavicon && !customFavicons.includes(savedFavicon)) {
+      document.getElementById("cloak-favicon").value = "custom";
+      document.getElementById("cloak-favicon-custom").style.display = "block";
+      document.getElementById("cloak-favicon-custom").value = savedFavicon;
+    } else {
+      document.getElementById("cloak-favicon").value = savedFavicon;
+    }
     document.getElementById("panic-enabled").checked  = load("astriex_panic_enabled", false);
     document.getElementById("panic-url").value        = load("astriex_panic_url", "https://classroom.google.com");
     document.getElementById("panic-key-display").textContent = load("astriex_panic_key", "") || "—";
@@ -301,7 +324,7 @@
   document.getElementById("search-engine").addEventListener("change",  e => save("astriex_search", e.target.value));
   document.getElementById("cloak-enabled").addEventListener("change",  e => save("astriex_cloak_enabled", e.target.checked));
   document.getElementById("cloak-title").addEventListener("input",     e => save("astriex_cloak_title", e.target.value));
-  document.getElementById("cloak-favicon").addEventListener("change",  e => save("astriex_cloak_favicon", e.target.value));
+  // cloak-favicon handled by onFaviconSelect()
   document.getElementById("panic-enabled").addEventListener("change",  e => save("astriex_panic_enabled", e.target.checked));
   document.getElementById("panic-url").addEventListener("change",      e => { save("astriex_panic_url", e.target.value); toggleCustomPanicRow(); });
   document.getElementById("panic-custom-url").addEventListener("input",e => save("astriex_panic_custom_url", e.target.value));
