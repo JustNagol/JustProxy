@@ -258,10 +258,14 @@
       allGames = override;
     } else {
       try {
-        const res = await fetch("/games/games-list.json");
-        allGames = await res.json();
-      } catch(e) {
-        allGames = [];
+        const res = await fetch("/api/games");
+        if (res.ok) { allGames = await res.json(); }
+        else { throw new Error(); }
+      } catch {
+        try {
+          const res = await fetch("/games/games-list.json");
+          allGames = res.ok ? await res.json() : [];
+        } catch { allGames = []; }
       }
     }
     // Always merge user-added games from localStorage
