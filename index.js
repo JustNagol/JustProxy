@@ -13,25 +13,32 @@ const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 const ADMIN_PASS  = process.env.ADMIN_PASSWORD || "changeme";
 
 async function redisCmd(...args) {
-  const res = await fetch(`${REDIS_URL}/${args.map(encodeURIComponent).join("/")}`, {
-    headers: { Authorization: `Bearer ${REDIS_TOKEN}` }
-  });
-  const data = await res.json();
-  return data.result;
+  if (!REDIS_URL || !REDIS_TOKEN) return null;
+  try {
+    const res = await fetch(`${REDIS_URL}/${args.map(encodeURIComponent).join("/")}`, {
+      headers: { Authorization: `Bearer ${REDIS_TOKEN}` }
+    });
+    const data = await res.json();
+    return data.result;
+  } catch { return null; }
 }
 
 async function getPending() {
-  const ids = await redisCmd("lrange", "pending", "0", "-1");
-  if (!ids || !ids.length) return [];
-  const games = await Promise.all(ids.map(id => redisCmd("get", `game:${id}`)));
-  return games.filter(Boolean).map(g => JSON.parse(g));
+  try {
+    const ids = await redisCmd("lrange", "pending", "0", "-1");
+    if (!ids || !ids.length) return [];
+    const games = await Promise.all(ids.map(id => redisCmd("get", `game:${id}`)));
+    return games.filter(Boolean).map(g => JSON.parse(g));
+  } catch { return []; }
 }
 
 async function getApproved() {
-  const ids = await redisCmd("lrange", "approved", "0", "-1");
-  if (!ids || !ids.length) return [];
-  const games = await Promise.all(ids.map(id => redisCmd("get", `game:${id}`)));
-  return games.filter(Boolean).map(g => JSON.parse(g));
+  try {
+    const ids = await redisCmd("lrange", "approved", "0", "-1");
+    if (!ids || !ids.length) return [];
+    const games = await Promise.all(ids.map(id => redisCmd("get", `game:${id}`)));
+    return games.filter(Boolean).map(g => JSON.parse(g));
+  } catch { return []; }
 }
 
 // ── PUBLIC ROUTES ──
@@ -45,10 +52,13 @@ app.get("/admin", (_req, res) => res.sendFile(join(__dirname, "public/admin.html
 // Games list — merges static games-list.json + approved community games
 app.get("/api/games", async (_req, res) => {
   try {
-    const { createRequire } = await import("module");
-    const require = createRequire(import.meta.url);
+    const { readFileSync } = await import("fs");
+    const { join } = await import("path");
     let base = [];
-    try { base = require("./public/games/games-list.json"); } catch {}
+    try {
+      const raw = readFileSync(join(__dirname, "public/games/games-list.json"), "utf8");
+      base = JSON.parse(raw);
+    } catch {}
     const approved = await getApproved();
     res.json([...base, ...approved]);
   } catch (e) {
