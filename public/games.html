@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Games — Astriex</title>
   <style>
@@ -181,16 +180,23 @@
   .loader-dot { background: rgba(255,255,255,0.3) !important; }
   .theme-swatch.active::after { color: #fff !important; }
   ::placeholder { color: rgba(255,255,255,0.3) !important; }
-  canvas.vanta-canvas { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: -1 !important; }
+
   html, body { min-height: 100% !important; }
 
   select option { background: #1a1a1a !important; color: #fff !important; }
 
+
+  /* CSS ANIMATED BACKGROUND */
+  .bg-canvas { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(160deg, #0d0d0d 0%, #1a1a1a 40%, #0f0f0f 100%); }
+  .bg-canvas::before { content: ''; position: absolute; inset: -50%; background: radial-gradient(ellipse 80% 40% at 20% 30%, rgba(80,80,80,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 30% at 70% 60%, rgba(60,60,60,0.15) 0%, transparent 55%); animation: drift1 18s ease-in-out infinite alternate; }
+  .bg-canvas::after { content: ''; position: absolute; inset: -50%; background: radial-gradient(ellipse 70% 35% at 80% 20%, rgba(70,70,70,0.14) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 30% 70%, rgba(90,90,90,0.12) 0%, transparent 50%); animation: drift2 24s ease-in-out infinite alternate; }
+  @keyframes drift1 { 0%{transform:translate(0%,0%) scale(1)} 33%{transform:translate(3%,-2%) scale(1.04)} 66%{transform:translate(-2%,3%) scale(0.97)} 100%{transform:translate(2%,1%) scale(1.02)} }
+  @keyframes drift2 { 0%{transform:translate(0%,0%) scale(1.02)} 33%{transform:translate(-3%,2%) scale(0.98)} 66%{transform:translate(2%,-3%) scale(1.03)} 100%{transform:translate(-1%,-1%) scale(1)} }
+
 </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
-</head>
+  </head>
 <body>
+<div class="bg-canvas"></div>
 <span class="corner tl">Astriex</span>
 
 <div class="page">
@@ -277,7 +283,7 @@
     // Suggest card first
     const suggestCard = document.createElement("a");
     suggestCard.className = "suggest-card";
-    suggestCard.href = "https://forms.gle/boUo7TjiY7kBdV7u5";
+    suggestCard.href = "https://forms.gle/YOUR_FORM_ID";
     suggestCard.target = "_blank";
     suggestCard.rel = "noopener";
     suggestCard.innerHTML = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="suggest-label">Suggest Game</span>`;
@@ -311,11 +317,6 @@
       }
       grid.appendChild(card);
     });
-  // Keep vanta canvas fixed/full viewport
-  const vantaCanvas = document.querySelector("canvas");
-  if (vantaCanvas) {
-    vantaCanvas.style.cssText = "position:fixed!important;top:0!important;left:0!important;width:100vw!important;height:100vh!important;z-index:-1!important;";
-  }
   }
 
   function renderEmpty() {
@@ -483,24 +484,7 @@
   loadGames();
 </script>
 
-<script>
-  VANTA.CLOUDS({
-    el: "body",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    backgroundColor: 0x333333,
-    skyColor: 0x292929,
-    cloudColor: 0x444444,
-    cloudShadowColor: 0x818181,
-    sunColor: 0x747474,
-    sunGlareColor: 0x7c7c7c,
-    sunlightColor: 0x474747,
-    speed: 1.60
-  });
-</script>
+
 <script src="/uv/uv.bundle.js"></script>
 <script src="/uv/uv.config.js"></script>
 <script src="/global.js"></script>
