@@ -110,6 +110,12 @@
     "file": "/games/files/cluster-rush/index.html"
   },
   {
+    "id": "stacktris",
+    "title": "Stacktris",
+    "thumbnail": "/games/thumbs/stacktris.jpg",
+    "file": "/games/files/stacktris/index.html"
+  },
+  {
     "id": "drift-boss",
     "title": "Drift Boss",
     "thumbnail": "/games/thumbs/drift-boss.jpg",
