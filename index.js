@@ -69,10 +69,17 @@ app.get("/api/games", async (_req, res) => {
 // Submit a game for review
 app.post("/api/submit", async (req, res) => {
   try {
-    const { title, url, thumbnail } = req.body;
-    if (!title || !url) return res.status(400).json({ error: "title and url required" });
+    const { title, url, blobContent, thumbnail } = req.body;
+    if (!title) return res.status(400).json({ error: "title required" });
+    if (!url && !blobContent) return res.status(400).json({ error: "url or html content required" });
     const id = `sub_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
-    const game = { id, title, url, thumbnail: thumbnail || null, submittedAt: new Date().toISOString() };
+    const game = {
+      id, title,
+      url: url || null,
+      blobContent: blobContent || null,
+      thumbnail: thumbnail || null,
+      submittedAt: new Date().toISOString()
+    };
     await redisCmd("set", `game:${id}`, JSON.stringify(game));
     await redisCmd("rpush", "pending", id);
     res.json({ ok: true });
