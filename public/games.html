@@ -70,13 +70,7 @@
     .corner { position: fixed; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: #2a2a2a; }
     .corner.tl { top: 1.5rem; left: 1.5rem; }
     @keyframes fade-up { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
-
-    .suggest-card { background: rgba(0,0,0,0.2); border: 2px dashed rgba(255,255,255,0.15); border-radius: 10px; cursor: pointer; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; transition: border-color 0.2s, background 0.2s; text-decoration: none; }
-    .suggest-card:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
-    .suggest-card svg { width: 28px; height: 28px; stroke: rgba(255,255,255,0.3); fill: none; stroke-width: 1.5; }
-    .suggest-card:hover svg { stroke: rgba(255,255,255,0.7); }
-    .suggest-label { font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
-    .suggest-card:hover .suggest-label { color: rgba(255,255,255,0.7); }
+    .suggest-card:hover
 
     /* ADD GAME CARD */
     .add-game-card { background: rgba(0,0,0,0.2); border: 2px dashed rgba(255,255,255,0.15); border-radius: 10px; cursor: pointer; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; transition: border-color 0.2s, background 0.2s; }
@@ -284,15 +278,6 @@
 
     games = [...games].sort((a, b) => a.title.localeCompare(b.title));
 
-    // Suggest card first
-    const suggestCard = document.createElement("a");
-    suggestCard.className = "suggest-card";
-    suggestCard.href = "https://forms.gle/daxP4ijAXWYSDHp27";
-    suggestCard.target = "_blank";
-    suggestCard.rel = "noopener";
-    suggestCard.innerHTML = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="suggest-label">Suggest Game</span>`;
-    grid.appendChild(suggestCard);
-
     // Add Game card second
     const addCard = document.createElement("div");
     addCard.className = "add-game-card";
@@ -364,8 +349,30 @@
 
   // ── ADD GAME SYSTEM ──
   let addTab = "url";
+  let submitType = "url";
   let uploadedFileContent = null;
+  let submitFileContent = null;
   let thumbDataUrl = null;
+
+  function switchSubmitType(type) {
+    submitType = type;
+    ["url","upload","paste"].forEach(t => {
+      document.getElementById("submit-type-" + t).style.display = t === type ? "block" : "none";
+      document.getElementById("stype-" + t).classList.toggle("active", t === type);
+    });
+  }
+
+  function onSubmitFileChosen(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById("submit-upload-chosen").textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = ev => { submitFileContent = ev.target.result; };
+    reader.readAsText(file);
+    if (!document.getElementById("add-title").value) {
+      document.getElementById("add-title").value = file.name.replace(/\.html?$/i, "").replace(/[-_]/g, " ");
+    }
+  }
 
   function openAddModal() {
     document.getElementById("add-modal").classList.add("open");
@@ -380,7 +387,12 @@
     document.getElementById("add-title").value = "";
     document.getElementById("add-thumb-url").value = "";
     document.getElementById("add-paste").value = "";
-    document.getElementById("submit-url").value = "";
+    if(document.getElementById("submit-url")) document.getElementById("submit-url").value = "";
+    if(document.getElementById("submit-paste")) document.getElementById("submit-paste").value = "";
+    if(document.getElementById("submit-upload-chosen")) document.getElementById("submit-upload-chosen").textContent = "";
+    submitFileContent = null;
+    submitType = "url";
+    switchSubmitType("url");
     document.getElementById("upload-chosen").textContent = "";
     document.getElementById("thumb-preview").innerHTML = '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
     uploadedFileContent = null;
@@ -466,9 +478,6 @@
       if (!html) { alert("Please paste some HTML."); return; }
       game.blobContent = html;
       game.file = "_blob_";
-    } else if (addTab === "submit") {
-      const url = document.getElementById("submit-url").value.trim();
-      if (!url) { alert("Please enter a URL to submit."); return; }
       // POST to backend for review
       try {
         const r = await fetch("/api/submit", {
@@ -550,13 +559,33 @@
         <textarea class="add-input add-textarea" id="add-paste" placeholder="<!DOCTYPE html>..."></textarea>
       </div>
     </div>
-
     <!-- Submit pane -->
     <div class="add-pane" id="add-pane-submit">
-      <div style="font-size:0.58rem;color:rgba(255,255,255,0.5);line-height:1.7;">Submit your game for review. If approved, it will appear on the site for everyone. Only URL-based games can be submitted.</div>
-      <div class="add-field">
-        <label class="add-label">Game URL</label>
-        <input class="add-input" id="submit-url" type="text" placeholder="https://game-site.com" />
+      <div style="font-size:0.55rem;line-height:1.8;color:rgba(255,255,255,0.45);">Submit a game for review. If approved it will appear on the site for everyone.</div>
+      <div class="add-tabs" style="margin-top:0.25rem;">
+        <button class="add-tab active" onclick="switchSubmitType('url')" id="stype-url">Link</button>
+        <button class="add-tab" onclick="switchSubmitType('upload')" id="stype-upload">Upload HTML</button>
+        <button class="add-tab" onclick="switchSubmitType('paste')" id="stype-paste">Paste HTML</button>
+      </div>
+      <div id="submit-type-url">
+        <div class="add-field">
+          <label class="add-label">Game URL</label>
+          <input class="add-input" id="submit-url" type="text" placeholder="https://game-site.com" />
+        </div>
+      </div>
+      <div id="submit-type-upload" style="display:none">
+        <label class="upload-btn" for="submit-file-input">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Choose HTML File
+        </label>
+        <input type="file" id="submit-file-input" accept=".html,.htm" style="display:none" onchange="onSubmitFileChosen(event)" />
+        <div class="upload-chosen" id="submit-upload-chosen"></div>
+      </div>
+      <div id="submit-type-paste" style="display:none">
+        <div class="add-field">
+          <label class="add-label">Paste HTML Code</label>
+          <textarea class="add-input add-textarea" id="submit-paste" placeholder="<!DOCTYPE html>..."></textarea>
+        </div>
       </div>
     </div>
 
