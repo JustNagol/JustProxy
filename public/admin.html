@@ -53,6 +53,14 @@
     .tab:hover { color: #fff; }
     .tab.active { color: #fff; border-bottom-color: #fff; }
 
+    .playtest-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; }
+    .playtest-modal.open { display: flex; }
+    .playtest-header { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; border-bottom: 1px solid #1a1a1a; flex-shrink: 0; gap: 1rem; }
+    .playtest-title { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 1.1rem; }
+    .playtest-body { flex: 1; position: relative; background: #000; }
+    .playtest-iframe { width: 100%; height: 100%; border: none; display: block; position: absolute; inset: 0; }
+    .playtest-actions { display: flex; gap: 0.5rem; }
+
     .toast { position: fixed; bottom: 2rem; right: 2rem; background: #111; border: 1px solid #2a2a2a; padding: 0.75rem 1.25rem; font-size: 0.6rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
     .toast.show { opacity: 1; }
     .toast.ok { border-color: #44aa66; color: #44aa66; }
@@ -66,7 +74,6 @@
   <div class="login-box">
     <div>
       <div class="login-title">Admin</div>
-      <div class="login-sub" style="margin-top:0.3rem">Astriex — Game Review Dashboard</div>
     </div>
     <div class="field">
       <label>Password</label>
@@ -180,6 +187,7 @@
         <div class="card-date">Submitted ${new Date(game.submittedAt).toLocaleString()}</div>
       </div>
       <div class="card-actions">
+        <button class="btn" onclick="playtest(${JSON.stringify(game).replace(/"/g, '&quot;')})">▶ Test</button>
         <button class="btn approve" onclick="approve('${game.id}')">✓ Approve</button>
         <button class="btn deny" onclick="deny('${game.id}')">✕ Deny</button>
       </div>`;
@@ -209,6 +217,14 @@
     loadApproved();
   }
 
+  async function denyDirect(id) {
+    const res = await fetch(`/api/admin/deny/${id}`, { method: "POST", headers: { "x-admin-password": adminPass } });
+    if (!res.ok) { toast("Failed to deny", "err"); return; }
+    document.getElementById(`card-${id}`)?.remove();
+    toast("Submission denied.", "err");
+    loadPending();
+  }
+
   async function deny(id) {
     if (!confirm("Deny and delete this submission?")) return;
     const res = await fetch(`/api/admin/deny/${id}`, { method: "POST", headers: { "x-admin-password": adminPass } });
@@ -216,6 +232,41 @@
     document.getElementById(`card-${id}`)?.remove();
     toast("Submission denied.", "err");
     loadPending();
+  }
+
+  // ── PLAYTEST ──
+  let playtestId = null;
+
+  function playtest(game) {
+    playtestId = game.id;
+    document.getElementById("playtest-title").textContent = game.title;
+    document.getElementById("playtest-modal").classList.add("open");
+
+    // Load game — proxy URL if it's a URL-based game
+    const iframe = document.getElementById("playtest-iframe");
+    if (game.url) {
+      iframe.src = game.url; // direct for admin preview
+    } else if (game.blobContent) {
+      const blob = new Blob([game.blobContent], { type: "text/html" });
+      iframe.src = URL.createObjectURL(blob);
+    }
+
+    // Wire approve/deny buttons
+    document.getElementById("playtest-approve-btn").onclick = async () => {
+      await approve(playtestId);
+      closePlaytest();
+    };
+    document.getElementById("playtest-deny-btn").onclick = async () => {
+      if (!confirm("Deny and delete this submission?")) return;
+      await denyDirect(playtestId);
+      closePlaytest();
+    };
+  }
+
+  function closePlaytest() {
+    document.getElementById("playtest-modal").classList.remove("open");
+    document.getElementById("playtest-iframe").src = "";
+    playtestId = null;
   }
 
   // ── TOAST ──
@@ -226,5 +277,19 @@
     setTimeout(() => el.classList.remove("show"), 3000);
   }
 </script>
+<!-- PLAYTEST MODAL -->
+<div class="playtest-modal" id="playtest-modal">
+  <div class="playtest-header">
+    <div class="playtest-title" id="playtest-title">Playtesting...</div>
+    <div class="playtest-actions">
+      <button class="btn approve" id="playtest-approve-btn">✓ Approve</button>
+      <button class="btn deny" id="playtest-deny-btn">✕ Deny</button>
+      <button class="btn" onclick="closePlaytest()">✕ Close</button>
+    </div>
+  </div>
+  <div class="playtest-body">
+    <iframe class="playtest-iframe" id="playtest-iframe" allow="autoplay; fullscreen"></iframe>
+  </div>
+</div>
 </body>
 </html>
