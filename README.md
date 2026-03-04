@@ -1,4 +1,4 @@
-# Astriex
+# JustProxy
 A simple open source unblocked gaming site thats self hosted and has a custom made fully frontend media system.
 
 ## Features
@@ -11,7 +11,5 @@ A simple open source unblocked gaming site thats self hosted and has a custom ma
 - [55gms](https://github.com/55GMS/55gms) - bunch of games
 - [truffled](https://truffled.lol) - games
 
-
-### Contributors
-
-[![Contributors](https://contrib.rocks/image?repo=s0lace-games/astriex)](https://github.com/s0lace-games/astriex/graphs/contributors)
+## Owner
+- JustNagol
