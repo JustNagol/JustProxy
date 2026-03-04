@@ -10,7 +10,7 @@ app.use(express.static(join(__dirname, "public")));
 // ── UPSTASH REDIS HELPERS ──
 const REDIS_URL   = process.env.UPSTASH_REDIS_REST_URL;
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-const ADMIN_PASS  = process.env.ADMIN_PASSWORD || "changeme";
+const ADMIN_PASS  = process.env.ADMIN_PASSWORD || "YourMomIsGay";
 
 async function redisCmd(...args) {
   if (!REDIS_URL || !REDIS_TOKEN) return null;
