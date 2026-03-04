@@ -44,11 +44,6 @@ async function getApproved() {
 // ── PUBLIC ROUTES ──
 
 // Short routes
-// UV service paths — return empty so the service worker can intercept
-app.get("/uv/service/*", (_req, res) => {
-  res.status(200).send("");
-});
-
 app.get("/g", (_req, res) => res.sendFile(join(__dirname, "public/games.html")));
 app.get("/m", (_req, res) => res.sendFile(join(__dirname, "public/media.html")));
 app.get("/s", (_req, res) => res.sendFile(join(__dirname, "public/settings.html")));
@@ -128,12 +123,7 @@ app.post("/api/admin/deny/:id", auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.use("*", (req, res) => {
-  // Let UV service worker paths pass through — don't intercept them
-  if (req.path.startsWith("/uv/service/")) {
-    res.status(404).send("Not found");
-    return;
-  }
+app.use("*", (_req, res) => {
   res.sendFile(join(__dirname, "public/index.html"));
 });
 
