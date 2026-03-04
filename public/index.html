@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Astriex</title>
+  <title>JustProxy</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -133,11 +133,11 @@
   </head>
 <body>
 <div class="bg-canvas"></div>
-<span class="corner tl">Astriex</span>
+<span class="corner tl">JustProxy</span>
 <span class="corner br">v1.0</span>
 
 <div class="page">
-  <h1 class="wordmark">Astriex</h1>
+  <h1 class="wordmark">JustProxy</h1>
   <p class="tagline">BETA</p>
   <div class="search-wrap">
     <input id="url-input" type="text" placeholder="enter a url or search query..." autocomplete="off" spellcheck="false" />
@@ -178,7 +178,7 @@
   function navigate(url) {
     if (!url) return;
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      url = url.includes(".") && !url.includes(" ") ? "https://" + url : (window.ASTRIEX_SEARCH || "https://www.google.com/search?q=") + encodeURIComponent(url);
+      url = url.includes(".") && !url.includes(" ") ? "https://" + url : (window.JustProxy_SEARCH || "https://www.google.com/search?q=") + encodeURIComponent(url);
     }
     const prefix = typeof __uv$config !== "undefined" ? __uv$config.prefix : UV_PREFIX;
     const encode = typeof __uv$config !== "undefined" ? __uv$config.encodeUrl : encodeURIComponent;
