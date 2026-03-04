@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Games — Astriex</title>
+  <title>Games — JustProxy</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -204,7 +204,7 @@
   </head>
 <body>
 <div class="bg-canvas"></div>
-<span class="corner tl">Astriex</span>
+<span class="corner tl">JustProxy</span>
 
 <div class="page">
   <div class="page-header">
@@ -259,7 +259,7 @@
   }
 
   async function loadGames() {
-    const override = window.ASTRIEX_GAMES_OVERRIDE;
+    const override = window.JustProxy_GAMES_OVERRIDE;
     if (override) {
       allGames = override;
     } else {
@@ -460,12 +460,12 @@
   }
 
   function getUserGames() {
-    try { return JSON.parse(localStorage.getItem("astriex_user_games") || "[]"); }
+    try { return JSON.parse(localStorage.getItem("JustProxy_user_games") || "[]"); }
     catch { return []; }
   }
 
   function saveUserGames(games) {
-    localStorage.setItem("astriex_user_games", JSON.stringify(games));
+    localStorage.setItem("JustProxy_user_games", JSON.stringify(games));
   }
 
   function deleteUserGame(id) {
