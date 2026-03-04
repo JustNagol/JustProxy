@@ -8,7 +8,7 @@ A simple open source unblocked gaming site thats self hosted and has a custom ma
 
 ## Credits
 - [Ultraviolet](https://github.com/titaniumnetwork-dev/Ultraviolet) - proxy code + uv setup
-- [55gms](https://gitlab.com/55GMS/55gms) - bunch of games
+- [55gms](https://github.com/55GMS/55gms) - bunch of games
 - [truffled](https://truffled.lol) - games
 
 
