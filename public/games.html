@@ -263,16 +263,23 @@
     if (override) {
       allGames = override;
     } else {
+      // Always load local curated games first
+      let base = [];
       try {
-        const res = await fetch("/api/games");
-        if (res.ok) { allGames = await res.json(); }
-        else { throw new Error(); }
-      } catch {
-        try {
-          const res = await fetch("/games/games-list.json");
-          allGames = res.ok ? await res.json() : [];
-        } catch { allGames = []; }
-      }
+        const res = await fetch("/games/games-list.json");
+        if (res.ok) base = await res.json();
+      } catch {}
+
+      // Then fetch approved community games from central API
+      // Falls back gracefully if unreachable
+      let community = [];
+      try {
+        const centralUrl = window.ASTRIEX_CENTRAL_API || "/api/community-games";
+        const res = await fetch(centralUrl);
+        if (res.ok) community = await res.json();
+      } catch {}
+
+      allGames = [...base, ...community];
     }
     // Always merge user-added games from localStorage
     const userGames = getUserGames().map(g => ({ ...g, _user: true }));
@@ -294,7 +301,7 @@
     // Suggest card
     const suggestCard = document.createElement("a");
     suggestCard.className = "suggest-card";
-    suggestCard.href = "https://forms.gle/rfEgtghFkeZ9yUY29";
+    suggestCard.href = "https://forms.gle/YOUR_FORM_ID";
     suggestCard.target = "_blank";
     suggestCard.rel = "noopener";
     suggestCard.innerHTML = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="suggest-label">Suggest Game</span>`;
