@@ -502,7 +502,8 @@
         payload.blobContent = html;
       }
       try {
-        const r = await fetch("/api/submit", {
+        const submitEndpoint = (window.ASTRIEX_CENTRAL_API || "/api/community-games").replace("/api/community-games", "/api/submit");
+        const r = await fetch(submitEndpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
