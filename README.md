@@ -12,4 +12,4 @@ A simple open source unblocked gaming site thats self hosted and has a custom ma
 - [truffled](https://truffled.lol) - games
 
 ## Owner
-- JustNagol
+[![Contributors](https://contrib.rocks/image?repo=s0lace-games/astriex)](https://github.com/s0lace-games/astriex/graphs/contributors)
