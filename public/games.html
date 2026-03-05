@@ -274,7 +274,7 @@
       // Falls back gracefully if unreachable
       let community = [];
       try {
-        const centralUrl = window.ASTRIEX_CENTRAL_API || "/api/community-games";
+        const centralUrl = "https://niche-astriex.vercel.app/api/community-games";
         const res = await fetch(centralUrl);
         if (res.ok) community = await res.json();
       } catch {}
