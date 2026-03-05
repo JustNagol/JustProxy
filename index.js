@@ -154,4 +154,9 @@ app.post("/api/admin/deny/:id",      auth, async (req, res)  => { try { await de
 
 app.use("*", (_req, res) => res.sendFile(join(__dirname, "public/index.html")));
 
+const port = process.env.PORT || 3000;
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => console.log(`Running on ${port}`));
+}
+
 export default app;
