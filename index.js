@@ -1,7 +1,8 @@
 import express from "express";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import fs from "fs";
+const { readFileSync, writeFileSync, existsSync } = fs;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -14,7 +15,7 @@ const ADMIN_PASS  = process.env.ADMIN_PASSWORD || "changeme";
 const USE_REDIS   = !!(REDIS_URL && REDIS_TOKEN);
 
 // ── LOCAL FILE FALLBACK (for self-hosters without Redis) ──
-const DATA_FILE = join(__dirname, "data.json");
+const DATA_FILE = "/tmp/data.json";
 
 function readData() {
   try {
