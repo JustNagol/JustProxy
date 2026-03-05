@@ -1,5 +1,3 @@
-// ── ASTRIEX GLOBAL.JS ──
-// Loaded on every page. Applies persistent settings from localStorage.
 
 (function () {
   function load(k, def) {
@@ -55,8 +53,8 @@
 
   // ── EXPOSE GLOBALS ──
   window.ASTRIEX_SEARCH         = load("astriex_search", "https://www.google.com/search?q=");
-  // Central API — forks override this to point to the main instance
-  window.ASTRIEX_CENTRAL_API    = window.ASTRIEX_CENTRAL_API || "/api/community-games";
+  // Central API — always points to main instance regardless of where the fork is hosted
+  window.ASTRIEX_CENTRAL_API = "https://niche-astriex.vercel.app/api/community-games";
   window.ASTRIEX_GAMES_OVERRIDE = load("astriex_games_override", null);
 
 })();
