@@ -84,17 +84,14 @@
     .corner.tl { top: 1.5rem; left: 1.5rem; }
     @keyframes fade-up { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
   
-  /* CSS ANIMATED BACKGROUND */
-  .bg-canvas { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(160deg, #0d0d0d 0%, #1a1a1a 40%, #0f0f0f 100%); }
-  .bg-canvas::before { content: ''; position: absolute; inset: -50%; background: radial-gradient(ellipse 80% 40% at 20% 30%, rgba(80,80,80,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 30% at 70% 60%, rgba(60,60,60,0.15) 0%, transparent 55%); animation: drift1 18s ease-in-out infinite alternate; }
-  .bg-canvas::after { content: ''; position: absolute; inset: -50%; background: radial-gradient(ellipse 70% 35% at 80% 20%, rgba(70,70,70,0.14) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 30% 70%, rgba(90,90,90,0.12) 0%, transparent 50%); animation: drift2 24s ease-in-out infinite alternate; }
-  @keyframes drift1 { 0%{transform:translate(0%,0%) scale(1)} 33%{transform:translate(3%,-2%) scale(1.04)} 66%{transform:translate(-2%,3%) scale(0.97)} 100%{transform:translate(2%,1%) scale(1.02)} }
-  @keyframes drift2 { 0%{transform:translate(0%,0%) scale(1.02)} 33%{transform:translate(-3%,2%) scale(0.98)} 66%{transform:translate(2%,-3%) scale(1.03)} 100%{transform:translate(-1%,-1%) scale(1)} }
+  /* CSS ANIMATED BACKGROUND */ 33%{transform:translate(3%,-2%) scale(1.04)} 66%{transform:translate(-2%,3%) scale(0.97)} 100%{transform:translate(2%,1%) scale(1.02)} } 33%{transform:translate(-3%,2%) scale(0.98)} 66%{transform:translate(2%,-3%) scale(1.03)} 100%{transform:translate(-1%,-1%) scale(1)} }
 
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
 </head>
 <body>
-<div class="bg-canvas"></div>
+
 <span class="corner tl">Astriex</span>
 
 <div class="page">
@@ -163,6 +160,23 @@
           <option value="custom">Custom URL...</option>
         </select>
         <input class="ctrl-input" id="cloak-favicon-custom" type="text" placeholder="https://site.com/favicon.ico" style="display:none;width:220px;" oninput="save('astriex_cloak_favicon_custom', this.value)" />
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="section">
+    <p class="section-label">Background</p>
+    <div class="row">
+      <div class="row-info">
+        <span class="row-name">Style</span>
+      </div>
+      <div class="row-control">
+        <select class="ctrl-select" id="bg-style">
+          <option value="clouds">Clouds (full)</option>
+          <option value="clouds_slow">Clouds (lightweight)</option>
+          <option value="minimal">Minimal (solid)</option>
+        </select>
       </div>
     </div>
   </div>
@@ -268,7 +282,7 @@
   <div class="section">
     <p class="section-label">About</p>
     <div class="about-block">
-      <div class="about-row"><span class="about-key">Version</span><span class="about-val">1.0.0</span></div>
+      <div class="about-row"><span class="about-key">Version</span><span class="about-val">1.1.0</span></div>
       <div class="about-row"><span class="about-key">UV Version</span><span class="about-val">1.0.10</span></div>
       <div class="about-row"><span class="about-key">Service Worker</span><span class="about-val" id="sw-status">checking...</span></div>
     </div>
@@ -282,7 +296,6 @@
   <a class="nav-btn active" href="/s"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="nav-label">Settings</span></a>
 </nav>
 
-<script src="/global.js"></script>
 <script>
   // ── SIMPLE STORAGE HELPERS (direct localStorage, no dependency on global.js timing) ──
   function load(k, def) {
@@ -323,6 +336,7 @@
     document.getElementById("panic-key-display").textContent = load("astriex_panic_key", "") || "—";
     document.getElementById("panic-custom-url").value = load("astriex_panic_custom_url", "");
     document.getElementById("anti-close").checked     = load("astriex_anti_close", false);
+    document.getElementById("bg-style").value         = load("astriex_background", "clouds");
     document.getElementById("always-blank").checked   = load("astriex_always_blank", false);
     toggleCustomPanicRow();
     checkSW();
@@ -336,6 +350,7 @@
   document.getElementById("panic-enabled").addEventListener("change",  e => save("astriex_panic_enabled", e.target.checked));
   document.getElementById("panic-url").addEventListener("change",      e => { save("astriex_panic_url", e.target.value); toggleCustomPanicRow(); });
   document.getElementById("panic-custom-url").addEventListener("input",e => save("astriex_panic_custom_url", e.target.value));
+  document.getElementById("bg-style").addEventListener("change",    e => { save("astriex_background", e.target.value); location.reload(); });
   document.getElementById("anti-close").addEventListener("change",     e => save("astriex_anti_close", e.target.checked));
   document.getElementById("always-blank").addEventListener("change",   e => save("astriex_always_blank", e.target.checked));
 
@@ -374,7 +389,7 @@
     const cloakTitle = load("astriex_cloak_title", "") || "Astriex";
     w.document.write(
       '<!DOCTYPE html><html><head><title>' + cloakTitle + '</title></head>' +
-      '<body style="margin:0;padding:0;background:#000;overflow:hidden">' +
+      '<body style="margin:0;padding:0;background:#2d2d2d;overflow:hidden">' +
       '<iframe src="' + location.origin + '/index.html" ' +
       'style="position:fixed;inset:0;width:100%;height:100%;border:none" allowfullscreen>' +
       '</iframe></body></html>'
@@ -398,5 +413,22 @@
 </script>
 
 
+<script src="/uv/uv.bundle.js"></script>
+<script src="/uv/uv.config.js"></script>
+<script src="/global.js"></script>
+<div id="vanta-bg" style="position:fixed;inset:0;z-index:-1;width:100%;height:100%;"></div>
+<script>
+(function() {
+  var pref; try { pref = JSON.parse(localStorage.getItem('astriex_background') || '"clouds"'); } catch(e) { pref = 'clouds'; }
+  if (pref === 'minimal') { document.getElementById('vanta-bg').style.background = '#2d2d2d'; return; }
+  var speed = pref === 'clouds_slow' ? 0.60 : 1.60;
+  VANTA.CLOUDS({
+    el: "#vanta-bg", mouseControls: false, touchControls: false, gyroControls: false,
+    minHeight: 200, minWidth: 200, backgroundColor: 0x333333, skyColor: 0x292929,
+    cloudColor: 0x444444, cloudShadowColor: 0x818181, sunColor: 0x747474,
+    sunGlareColor: 0x7c7c7c, sunlightColor: 0x474747, speed: speed
+  });
+})();
+</script>
 </body>
 </html>
