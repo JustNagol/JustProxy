@@ -2,7 +2,7 @@
 
 function safeXorEncode(url) {
   const xored = Ultraviolet.codec.xor.encode(url);
-  return xored.replace(/[`^\\|{}[\]<>"']/g, c => encodeURIComponent(c));
+  return xored.replace(/[`^\\|<>"']/g, c => encodeURIComponent(c));
 }
 
 function safeXorDecode(url) {
