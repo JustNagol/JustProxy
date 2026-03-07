@@ -282,7 +282,7 @@
   <div class="section">
     <p class="section-label">About</p>
     <div class="about-block">
-      <div class="about-row"><span class="about-key">Version</span><span class="about-val">1.1.0</span></div>
+      <div class="about-row"><span class="about-key">Version</span><span class="about-val">1.0.0</span></div>
       <div class="about-row"><span class="about-key">UV Version</span><span class="about-val">1.0.10</span></div>
       <div class="about-row"><span class="about-key">Service Worker</span><span class="about-val" id="sw-status">checking...</span></div>
     </div>
@@ -387,14 +387,33 @@
     const w = window.open("", "_blank");
     if (!w) { alert("Pop-up blocked — allow pop-ups for this site."); return; }
     const cloakTitle = load("astriex_cloak_title", "") || "Astriex";
+    const panicEnabled = load("astriex_panic_enabled", false);
+    const panicKey = load("astriex_panic_key", "");
+    const panicUrl = load("astriex_panic_url", "https://classroom.google.com");
+    const panicCustom = load("astriex_panic_custom_url", "");
+    const finalPanicUrl = panicUrl === "custom" ? panicCustom : panicUrl;
+
     w.document.write(
       '<!DOCTYPE html><html><head><title>' + cloakTitle + '</title></head>' +
       '<body style="margin:0;padding:0;background:#2d2d2d;overflow:hidden">' +
       '<iframe src="' + location.origin + '/index.html" ' +
       'style="position:fixed;inset:0;width:100%;height:100%;border:none" allowfullscreen>' +
-      '</iframe></body></html>'
+      '</iframe>' +
+      '<script>' +
+      'var _panicEnabled=' + JSON.stringify(panicEnabled) + ';' +
+      'var _panicKey=' + JSON.stringify(panicKey) + ';' +
+      'var _panicUrl=' + JSON.stringify(finalPanicUrl) + ';' +
+      'document.addEventListener("keydown",function(e){' +
+      '  if(_panicEnabled && _panicKey && e.key===_panicKey){' +
+      '    window.location.replace(_panicUrl);' +  // replaces about:blank tab with panic site
+      '  }' +
+      '});' +
+      '<\/script>' +
+      '</body></html>'
     );
     w.document.close();
+    // Close the original tab
+    window.close();
   }
 
   // ── SERVICE WORKER STATUS ──
