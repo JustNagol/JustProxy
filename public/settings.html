@@ -393,8 +393,12 @@
     const panicCustom = load("astriex_panic_custom_url", "");
     const finalPanicUrl = panicUrl === "custom" ? panicCustom : panicUrl;
 
+    const cloakFavRaw = load("astriex_cloak_favicon", "");
+    const cloakFav = cloakFavRaw === "custom" ? load("astriex_cloak_favicon_custom", "") : cloakFavRaw;
+    const favicon = cloakFav || (location.origin + "/img/favicon.ico");
     w.document.write(
-      '<!DOCTYPE html><html><head><title>' + cloakTitle + '</title></head>' +
+      '<!DOCTYPE html><html><head><title>' + cloakTitle + '</title>' +
+      '<link rel="icon" href="' + favicon + '"></head>' +
       '<body style="margin:0;padding:0;background:#2d2d2d;overflow:hidden">' +
       '<iframe src="' + location.origin + '/index.html" ' +
       'style="position:fixed;inset:0;width:100%;height:100%;border:none" allowfullscreen>' +
