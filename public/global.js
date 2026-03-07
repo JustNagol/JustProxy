@@ -1,5 +1,4 @@
 
-
 (function () {
   function load(k, def) {
     try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); }
@@ -21,8 +20,15 @@
   }
 
   // ── ANTI CLOSE ──
+  // Only block unload when navigating away from the site entirely
   if (load("astriex_anti_close", false)) {
-    window.addEventListener("beforeunload", e => { e.preventDefault(); e.returnValue = ""; });
+    window.addEventListener("beforeunload", e => {
+      const el = document.activeElement;
+      const dest = (el && el.href) ? el.href : "";
+      if (dest && dest.startsWith(location.origin)) return;
+      e.preventDefault();
+      e.returnValue = "";
+    });
   }
 
   // ── PANIC KEY ──
@@ -38,19 +44,40 @@
   });
 
   // ── ALWAYS ABOUT:BLANK ──
-  // If enabled and we're NOT already inside an about:blank iframe, launch it
-  if (load("astriex_always_blank", false) && window.location === window.top.location) {
+  if (load("astriex_always_blank", false) && window.self === window.top) {
+    const cloakTitle   = load("astriex_cloak_title", "") || "Astriex";
+    const cloakFavRaw  = load("astriex_cloak_favicon", "");
+    const cloakFav     = cloakFavRaw === "custom" ? load("astriex_cloak_favicon_custom", "") : cloakFavRaw;
+    const favicon      = cloakFav || (location.origin + "/img/favicon.ico");
+    const panicEnabled = load("astriex_panic_enabled", false);
+    const panicKey     = load("astriex_panic_key", "");
+    const panicUrl     = load("astriex_panic_url", "https://classroom.google.com");
+    const panicCustom  = load("astriex_panic_custom_url", "");
+    const finalPanic   = panicUrl === "custom" ? panicCustom : panicUrl;
+
     const w = window.open("", "_blank");
     if (w) {
-      const title = load("astriex_cloak_title", "") || "Astriex";
       w.document.write(
-        '<!DOCTYPE html><html><head><title>' + title + '</title></head>' +
-        '<body style="margin:0;padding:0;background:#000;overflow:hidden">' +
+        '<!DOCTYPE html><html><head>' +
+        '<title>' + cloakTitle + '</title>' +
+        '<link rel="icon" href="' + favicon + '">' +
+        '</head>' +
+        '<body style="margin:0;padding:0;background:#2d2d2d;overflow:hidden">' +
         '<iframe src="' + location.href + '" ' +
         'style="position:fixed;inset:0;width:100%;height:100%;border:none" allowfullscreen>' +
-        '</iframe></body></html>'
+        '</iframe>' +
+        '<script>' +
+        'var _pe=' + JSON.stringify(panicEnabled) + ',' +
+        '_pk=' + JSON.stringify(panicKey) + ',' +
+        '_pu=' + JSON.stringify(finalPanic) + ';' +
+        'document.addEventListener("keydown",function(e){' +
+        '  if(_pe&&_pk&&e.key===_pk){window.location.replace(_pu);}' +
+        '});' +
+        '<\/script>' +
+        '</body></html>'
       );
       w.document.close();
+      window.close();
     }
   }
 
