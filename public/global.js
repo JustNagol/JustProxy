@@ -1,4 +1,5 @@
 
+
 (function () {
   function load(k, def) {
     try { const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); }
@@ -25,7 +26,9 @@
   }
 
   // ── PANIC KEY ──
+  // Skip if inside an iframe — the about:blank parent handles panic itself
   document.addEventListener("keydown", e => {
+    if (window.self !== window.top) return;
     if (!load("astriex_panic_enabled", false)) return;
     const key = load("astriex_panic_key", "");
     if (!key || e.key !== key) return;
