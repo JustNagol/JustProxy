@@ -1,3 +1,5 @@
+// ── ASTRIEX GLOBAL.JS ──
+// Loaded on every page. Applies persistent settings from localStorage.
 
 (function () {
   function load(k, def) {
@@ -5,6 +7,22 @@
     catch { return def; }
   }
   function save(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+  // ── DEVICE DETECTION: auto-minimal on low-power devices ──
+  (function() {
+    // Only auto-set if user hasn't manually chosen a background
+    if (localStorage.getItem("astriex_background") !== null) return;
+    var ua = navigator.userAgent.toLowerCase();
+    var isChromebook = ua.includes("cros");
+    var isLowEnd = false;
+    // Check hardware concurrency (CPU cores) — 4 or fewer = likely low-end
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) isLowEnd = true;
+    // Check device memory API if available — under 4GB = low-end
+    if (navigator.deviceMemory && navigator.deviceMemory < 4) isLowEnd = true;
+    if (isChromebook || isLowEnd) {
+      localStorage.setItem("astriex_background", JSON.stringify("minimal"));
+    }
+  })();
 
   // ── TAB CLOAK ──
   if (load("astriex_cloak_enabled", false)) {
@@ -82,7 +100,7 @@
   }
 
   // ── EXPOSE GLOBALS ──
-  window.ASTRIEX_SEARCH         = load("astriex_search", "https://www.google.com/search?q=");
+  window.ASTRIEX_SEARCH         = load("astriex_search", "https://duckduckgo.com/?q=");
   // Central API — always points to main instance regardless of where the fork is hosted
   window.ASTRIEX_CENTRAL_API = "https://niche-astriex.vercel.app/api/community-games";
   window.ASTRIEX_GAMES_OVERRIDE = load("astriex_games_override", null);
