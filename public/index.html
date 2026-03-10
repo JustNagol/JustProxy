@@ -175,7 +175,7 @@
   function navigate(url) {
     if (!url) return;
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      url = url.includes(".") && !url.includes(" ") ? "https://" + url : (window.ASTRIEX_SEARCH || "https://www.google.com/search?q=") + encodeURIComponent(url);
+      url = url.includes(".") && !url.includes(" ") ? "https://" + url : (window.ASTRIEX_SEARCH || "https://duckduckgo.com/?q=") + encodeURIComponent(url);
     }
     const prefix = typeof __uv$config !== "undefined" ? __uv$config.prefix : UV_PREFIX;
     const encode = typeof __uv$config !== "undefined" ? __uv$config.encodeUrl : encodeURIComponent;
