@@ -175,6 +175,12 @@
     "thumbnail": "/games/thumbs/gladihoppers.jpg",
     "file": "/games/files/non-folder/gladdihoppers.html"
   },
+{
+    "id": "bart blast",
+    "title": "Bart Blast",
+    "thumbnail": "/games/thumbs/bart-blast.jpeg",
+    "file": "/games/files/bart-blast.html"
+  },
   {
     "id": "ultrakill",
     "title": "ULTRAKILL",
